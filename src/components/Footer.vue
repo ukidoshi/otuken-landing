@@ -23,8 +23,8 @@
         <div>
           <h3 class="text-[#C9A961] font-bold mb-4">Контакты</h3>
           <ul class="space-y-2 text-sm">
-            <li>📞 +7 (983) 366-50-00</li>
-            <li>📧 info@otuken.ru</li>
+            <li>📞 +7 (913) 343-70-76</li>
+            <li>📧 otugen17@yandex.ru</li>
             <li>📍 Кызыл, Республика Тыва</li>
             <li>⏰ Пн-Пт: 09:00-18:00</li>
           </ul>

@@ -102,10 +102,10 @@
 
         <!-- placeholder visual -->
         <div class="bg-white rounded-2xl shadow-lg border border-[#C9A961]/15 overflow-hidden">
-          <div class="p-6 border-b border-[#C9A961]/10">
-            <div class="text-sm font-semibold text-[#1B5B7F]">Схема развития (плейсхолдер)</div>
-            <div class="text-xs opacity-70 mt-1">Позже можно заменить на реальную инфографику/рендер.</div>
-          </div>
+<!--          <div class="p-6 border-b border-[#C9A961]/10">-->
+<!--            <div class="text-sm font-semibold text-[#1B5B7F]">Схема развития (плейсхолдер)</div>-->
+<!--            <div class="text-xs opacity-70 mt-1">Позже можно заменить на реальную инфографику/рендер.</div>-->
+<!--          </div>-->
 
           <div class="p-6">
             <div class="grid grid-cols-2 gap-4">
@@ -247,6 +247,18 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-6 flex gap-5 items-start">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] flex items-center justify-center text-white font-bold">
+              AS
+            </div>
+            <div>
+              <div class="text-lg font-bold">Салчак Алимдорж Санданович</div>
+              <div class="text-sm text-[#1B5B7F] font-semibold mt-1">Организатор проекта</div>
+              <div class="text-sm opacity-85 mt-2 leading-relaxed">
+                Отвечает за организационное развитие проекта, партнёрскую модель и инвестиционную коммуникацию.
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-6 flex gap-5 items-start">
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C9A961] to-[#B89A50] flex items-center justify-center text-black font-bold">
               RS
             </div>
@@ -255,19 +267,6 @@
               <div class="text-sm text-[#1B5B7F] font-semibold mt-1">Организатор проекта</div>
               <div class="text-sm opacity-85 mt-2 leading-relaxed">
                 Курирует развитие концепции этнокомплекса и культурно-событийное направление.
-              </div>
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-6 flex gap-5 items-start">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] flex items-center justify-center text-white font-bold">
-              AS
-            </div>
-            <div>
-              <div class="text-lg font-bold">Алимдорж Салчак</div>
-              <div class="text-sm text-[#1B5B7F] font-semibold mt-1">Организатор проекта</div>
-              <div class="text-sm opacity-85 mt-2 leading-relaxed">
-                Отвечает за организационное развитие проекта, партнёрскую модель и инвестиционную коммуникацию.
               </div>
             </div>
           </div>
@@ -282,7 +281,7 @@
           <div class="max-w-2xl">
             <h3 class="text-2xl md:text-3xl font-bold mb-2">Вернуться на главную страницу</h3>
             <p class="text-sm md:text-base opacity-90 leading-relaxed">
-              На главной вы можете посмотреть участки, карту и другие разделы лендинга.
+              На главной вы можете посмотреть участки, карту и другие разделы об комплексе.
             </p>
           </div>
           <div class="flex gap-3 flex-col sm:flex-row">
