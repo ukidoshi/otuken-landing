@@ -1,23 +1,41 @@
 <template>
-  <section class="py-16 md:py-24 px-4 md:px-8" id="map" ref="mapSection">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-4xl md:text-5xl font-bold text-center text-[#1B5B7F] mb-4">
-        Выберите подходящий район
-      </h2>
-      <p class="text-center max-w-2xl mx-auto text-lg text-[#8B6F47] mb-12 leading-relaxed">
-        Комплекс разделен на уникальные кварталы, каждый с собственным характером и инфраструктурой
-      </p>
+  <section class="scroll-mt-24 md:scroll-mt-28 relative overflow-hidden py-20 md:py-28 px-4 md:px-8" id="map" ref="mapSection">
+    <div class="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(74,111,97,0.1),transparent_75%)] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-12">
+        <div class="section-badge mx-auto">
+          <span class="section-dot"></span>
+          Навигация по территории
+        </div>
+        <h2 class="section-title mt-5 mb-5">
+          Выберите подходящий район
+        </h2>
+        <p class="section-lead">
+          Комплекс разделен на уникальные кварталы, каждый с собственным характером и инфраструктурой.
+          Карта плавно приближает жилую часть, чтобы пользователь быстрее увидел доступные зоны.
+        </p>
+      </div>
 
-      <div class="bg-white rounded-lg p-4 md:p-6 lg:p-8 shadow-lg mb-8">
+      <div class="theme-card p-4 md:p-6 lg:p-8 mb-8">
+        <div class="grid gap-4 lg:grid-cols-[1.3fr_0.7fr] mb-5">
+          <div class="rounded-[1.6rem] border border-[rgba(184,138,66,0.16)] bg-white/60 px-5 py-4 text-sm text-[var(--ink-soft)] leading-7">
+            На карте выделены активные кварталы, строящиеся зоны и уже распределенные участки. При выборе доступного квартала открывается карточка с краткой информацией.
+          </div>
+          <div class="rounded-[1.6rem] border border-[rgba(74,111,97,0.16)] bg-[rgba(74,111,97,0.08)] px-5 py-4 text-sm text-[var(--ink)] leading-7">
+            <div class="font-semibold text-[var(--title)] mb-1">Подсказка</div>
+            На мобильном можно увеличить карту и сбросить вид с помощью кнопок справа.
+          </div>
+        </div>
+
         <div
           ref="mapContainer"
-          class="relative overflow-hidden rounded-lg bg-gray-50 map-scroll"
+          class="relative overflow-hidden rounded-[1.8rem] bg-[linear-gradient(180deg,rgba(255,250,243,0.8),rgba(243,236,223,0.86))] border border-[rgba(184,138,66,0.14)] map-scroll shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
         >
           <!-- Контролы для мобильных -->
           <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 md:hidden">
             <button
               @click="zoomIn"
-              class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg"
+              class="w-10 h-10 bg-[rgba(255,252,245,0.88)] backdrop-blur-sm rounded-2xl border border-[rgba(184,138,66,0.16)] shadow-[0_12px_24px_rgba(56,42,19,0.12)] flex items-center justify-center"
               aria-label="Увеличить"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +44,7 @@
             </button>
             <button
               @click="zoomOut"
-              class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg"
+              class="w-10 h-10 bg-[rgba(255,252,245,0.88)] backdrop-blur-sm rounded-2xl border border-[rgba(184,138,66,0.16)] shadow-[0_12px_24px_rgba(56,42,19,0.12)] flex items-center justify-center"
               aria-label="Уменьшить"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +53,7 @@
             </button>
             <button
               @click="resetZoom"
-              class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg text-xs"
+              class="w-10 h-10 bg-[rgba(255,252,245,0.88)] backdrop-blur-sm rounded-2xl border border-[rgba(184,138,66,0.16)] shadow-[0_12px_24px_rgba(56,42,19,0.12)] text-xs"
               aria-label="Сброс"
             >
               ↺
@@ -105,19 +123,19 @@
           <div
             v-for="(district, id) in districts"
             :key="id"
-            class="flex items-center gap-3 p-2 rounded"
-            :class="district.status === 'active' ? 'hover:bg-gray-50 cursor-pointer' : 'opacity-60'"
+            class="theme-card flex items-center gap-3 p-4"
+            :class="district.status === 'active' ? 'theme-card-hover cursor-pointer' : 'opacity-70'"
             @click="handleDistrictClick(id, district)"
           >
             <div
-              class="w-5 h-5 rounded flex-shrink-0"
+              class="w-5 h-5 rounded-md flex-shrink-0 shadow-[0_10px_18px_rgba(0,0,0,0.08)]"
               :style="{ backgroundColor: district.color, opacity: getDistrictOpacity(district) }"
             ></div>
             <div class="flex-1">
-              <span class="text-sm font-medium">
+              <span class="text-sm font-semibold text-[var(--ink)]">
                 {{ district.title.replace('Квартал \"', '').replace('\"', '') }}
               </span>
-              <span class="text-xs text-gray-500 block">
+              <span class="text-xs text-[var(--ink-soft)] block mt-1">
                 {{ getStatusText(district.status) }}
               </span>
             </div>
@@ -248,7 +266,7 @@ const getStatusText = (status) => {
     active: 'Доступен',
     sold: 'Распродан',
     building: 'Строится',
-    otuken: 'Отукен',
+    otuken: 'Өтүкен',
   }
   return statusMap[status] || 'Неизвестно'
 }

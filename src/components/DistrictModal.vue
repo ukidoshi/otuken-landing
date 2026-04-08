@@ -1,38 +1,38 @@
 <template>
   <div 
     v-if="isOpen" 
-    class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" 
+    class="fixed inset-0 bg-[rgba(16,21,17,0.62)] backdrop-blur-md z-50 flex items-center justify-center p-4" 
     @click.self="closeModal"
   >
-    <div class="bg-white rounded-lg p-6 md:p-8 max-w-md w-full animate-in">
-      <div class="flex justify-between items-center mb-4 pb-4 border-b-2 border-gray-200">
-        <h2 class="text-2xl font-bold text-[#1B5B7F]">{{ currentDistrict?.title }}</h2>
+    <div class="theme-card rounded-[1.75rem] p-6 md:p-8 max-w-md w-full animate-in">
+      <div class="flex justify-between items-center mb-4 pb-4 border-b border-[rgba(184,138,66,0.16)]">
+        <h2 class="display-font text-3xl text-[var(--title)] leading-none">{{ currentDistrict?.title }}</h2>
         <button 
           @click="closeModal" 
-          class="text-2xl text-gray-600 hover:text-[#C9A961] transition"
+          class="w-10 h-10 rounded-2xl bg-white/70 border border-[rgba(184,138,66,0.16)] text-xl text-[var(--ink-soft)] hover:text-[var(--gold)] transition"
         >
           &times;
         </button>
       </div>
-      <div class="mb-6 text-sm leading-relaxed">
-        <p class="mb-3"><strong>Тип района:</strong> {{ currentDistrict?.type }}</p>
-        <p class="mb-3"><strong>Участков доступно:</strong> ~{{ currentDistrict?.lots }}</p>
-        <div class="bg-[rgba(201,169,97,0.15)] p-3 rounded mb-3 border-l-4 border-[#C9A961]">
+      <div class="mb-6 text-sm leading-7 text-[var(--ink-soft)]">
+        <p class="mb-3"><strong class="text-[var(--ink)]">Тип района:</strong> {{ currentDistrict?.type }}</p>
+        <p class="mb-3"><strong class="text-[var(--ink)]">Участков доступно:</strong> ~{{ currentDistrict?.lots }}</p>
+        <div class="bg-[rgba(184,138,66,0.1)] p-4 rounded-2xl mb-4 border-l-4 border-[var(--gold)] text-[var(--ink)]">
           <p>{{ currentDistrict?.description }}</p>
         </div>
-        <p class="font-semibold mb-2">Инфраструктура рядом:</p>
+        <p class="font-semibold text-[var(--title)] mb-2">Инфраструктура рядом:</p>
         <p v-for="feature in currentDistrict?.features" :key="feature" class="mb-2">✓ {{ feature }}</p>
       </div>
       <div class="flex flex-col gap-3">
         <button 
           @click="contactDistrict" 
-          class="bg-[#C9A961] text-black px-6 py-3 rounded-lg font-semibold hover:bg-[#B89A50] transition w-full"
+          class="theme-button-primary w-full"
         >
           Интересует этот район
         </button>
         <button 
           @click="closeModal" 
-          class="bg-gray-200 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition w-full"
+          class="theme-button-light w-full"
         >
           Закрыть
         </button>

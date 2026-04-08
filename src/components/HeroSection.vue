@@ -8,89 +8,50 @@
     <div class="absolute inset-0">
       <transition-group name="fade" tag="div" class="absolute inset-0">
         <div
-            v-for="(src, idx) in slides"
-            :key="src"
+            v-for="(slide, idx) in slides"
+            :key="slide.src"
             v-show="idx === activeIndex"
             class="absolute inset-0"
         >
           <div
               class="absolute inset-0 bg-center bg-cover will-change-transform"
-              :style="bgStyle(src)"
+              :style="bgStyle(slide)"
           />
         </div>
       </transition-group>
 
       <!-- overlays -->
-      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(201,169,97,0.18),transparent_55%),radial-gradient(circle_at_80%_30%,rgba(27,91,127,0.25),transparent_55%)]"></div>
-
-      <!-- subtle noise -->
-      <div class="absolute inset-0 opacity-[0.09] mix-blend-overlay pointer-events-none noise"></div>
-
-      <!-- floating particles -->
-      <div class="absolute inset-0 pointer-events-none">
-        <span
-            v-for="n in particleCount"
-            :key="n"
-            class="particle"
-            :style="particleStyle(n)"
-        ></span>
-      </div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/82 via-black/58 to-black/86"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(0,0,0,0.42),transparent_34%),radial-gradient(circle_at_24%_22%,rgba(201,169,97,0.16),transparent_42%),radial-gradient(circle_at_80%_30%,rgba(27,91,127,0.18),transparent_48%)]"></div>
     </div>
 
     <!-- CONTENT -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 pt-28 md:pt-32 pb-16">
-      <div class="lg:text-center">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/35 bg-black/25 text-xs md:text-sm mb-6 reveal mx-auto">
+    <div class="relative z-10 max-w-7xl mx-auto min-h-[92vh] md:min-h-screen flex flex-col justify-center px-4 md:px-8 py-16 md:py-24">
+      <div class="max-w-4xl lg:mx-auto lg:text-center">
+        <div class="hero-panel reveal">
+          <div class="absolute inset-0 pointer-events-none hero-panel-glow"></div>
+
+          <div class="relative z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/35 bg-black/30 text-xs md:text-sm mb-6 lg:mx-auto">
           <span class="w-2 h-2 rounded-full bg-[#C9A961] animate-pulse"></span>
-          Проект в стадии строительства • инвестиционный потенциал
-        </div>
-
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6 reveal">
-          Этнокультурный комплекс <span class="text-[#C9A961]">«Отукен»</span>
-        </h1>
-
-        <p class="text-base md:text-xl text-white/90 leading-relaxed mb-9 reveal max-w-3xl lg:mx-auto">
-          Пространство культуры, событий и туризма в Республике Тыва.
-          Мы создаём точку притяжения с инфраструктурой для фестивалей, отдыха и партнёрских проектов.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-3 reveal lg:justify-center">
-          <button
-              @click="scrollTo('map')"
-              class="bg-[#C9A961] text-black px-6 py-3 rounded-lg font-semibold hover:bg-[#B89A50] transition transform hover:-translate-y-1 hover:shadow-xl"
-          >
-            Посмотреть участки
-          </button>
-
-          <button
-              @click="scrollTo('about')"
-              class="border-2 border-[#C9A961] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#C9A961] hover:text-black transition"
-          >
-            О комплексе
-          </button>
-
-          <button
-              @click="openAboutPage"
-              class="bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/15 transition"
-          >
-            О нас
-          </button>
-        </div>
-
-        <!-- Mini trust cards -->
-        <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 lg:max-w-5xl lg:mx-auto">
-          <div class="glass-card reveal">
-            <div class="text-[#C9A961] font-bold text-lg">Культура</div>
-            <div class="text-white/85 text-sm mt-1">традиции + современные форматы</div>
+          Республика Тыва • проект в стадии строительства
           </div>
-          <div class="glass-card reveal">
-            <div class="text-[#C9A961] font-bold text-lg">События</div>
-            <div class="text-white/85 text-sm mt-1">фестивали, программы, туризм</div>
-          </div>
-          <div class="glass-card reveal">
-            <div class="text-[#C9A961] font-bold text-lg">Инвестиции</div>
-            <div class="text-white/85 text-sm mt-1">партнёрства и инфраструктура</div>
+
+          <h1 class="hero-title display-font relative z-10 text-5xl md:text-7xl lg:text-[5.8rem] leading-[0.92] mb-6">
+            Этнокультурный комплекс <span class="text-[#C9A961]">«Өтүкен»</span>
+          </h1>
+
+          <p class="hero-copy relative z-10 text-base md:text-xl text-white/92 leading-relaxed mb-9 max-w-3xl lg:mx-auto">
+            Пространство культуры, туризма и событий в Республике Тыва.
+            «Өтүкен» объединяет этнокультурную среду, инфраструктуру для отдыха и площадки для крупных мероприятий.
+          </p>
+
+          <div class="relative z-10 flex justify-center">
+            <button
+                @click="scrollTo('about')"
+                class="theme-button-primary"
+            >
+              О проекте
+            </button>
           </div>
         </div>
       </div>
@@ -98,11 +59,11 @@
       <!-- scroll indicator -->
       <div class="mt-14 flex justify-center">
         <button
-            @click="scrollTo('statistics')"
+            @click="scrollTo('about')"
             class="group inline-flex flex-col items-center gap-2 text-white/70 hover:text-white transition reveal"
             aria-label="Скролл вниз"
         >
-          <span class="text-xs tracking-widest uppercase">Листайте вниз</span>
+          <span class="text-xs tracking-widest uppercase">Узнать больше</span>
           <span class="w-6 h-10 rounded-full border border-white/30 flex items-start justify-center p-1">
             <span class="w-2 h-2 rounded-full bg-[#C9A961] scroll-dot"></span>
           </span>
@@ -113,67 +74,50 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
-const router = useRouter()
-
-/**
- * 23 ФОТО:
- * src/assets/hero/1.jpeg ... 23.jpeg
- */
-import s1 from '../assets/hero/1.jpeg'
-import s2 from '../assets/hero/2.jpeg'
-import s3 from '../assets/hero/3.jpeg'
 import s4 from '../assets/hero/4.jpeg'
-import s5 from '../assets/hero/5.jpeg'
-import s6 from '../assets/hero/6.jpeg'
-import s7 from '../assets/hero/7.jpeg'
-import s8 from '../assets/hero/8.jpeg'
-import s9 from '../assets/hero/9.jpeg'
-import s10 from '../assets/hero/10.jpeg'
-import s11 from '../assets/hero/11.jpeg'
-import s12 from '../assets/hero/12.jpeg'
 import s13 from '../assets/hero/13.jpeg'
-import s14 from '../assets/hero/14.jpeg'
 import s15 from '../assets/hero/15.jpeg'
-import s16 from '../assets/hero/16.jpeg'
 import s17 from '../assets/hero/17.jpeg'
-import s18 from '../assets/hero/18.jpeg'
-import s19 from '../assets/hero/19.jpeg'
-import s20 from '../assets/hero/20.jpeg'
-import s21 from '../assets/hero/21.jpeg'
-import s22 from '../assets/hero/22.jpeg'
-import s23 from '../assets/hero/23.jpeg'
+import overview from '../assets/hero/overview.jpeg'
 
-const slides = [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23]
+const slides = [
+  { src: overview, focus: 'center 32%' },
+  { src: s17, focus: 'center center' },
+  { src: s15, focus: 'center center' },
+  { src: s13, focus: 'center center' },
+  { src: s4, focus: 'center center' }
+]
 
 // --- Mobile / Motion prefs ---
 const isMobile = ref(false)
 const reduceMotion = ref(false)
 
-const particleCount = computed(() => {
-  if (reduceMotion.value) return 0
-  return isMobile.value ? 6 : 14
-})
-
 // --- slideshow ---
 const activeIndex = ref(0)
 let timer = null
+let revealObserver = null
 
-const next = () => {
-  activeIndex.value = (activeIndex.value + 1) % slides.length
+const getSlideDuration = (index) => {
+  if (index === 0) return isMobile.value ? 14000 : 11500
+  return isMobile.value ? 8500 : 6500
 }
 
-const startAuto = () => {
+const scheduleNext = () => {
   stopAuto()
-  if (reduceMotion.value) return
-  // мобильный: реже, чтобы легче
-  const interval = isMobile.value ? 9000 : 6500
-  timer = window.setInterval(next, interval)
+  if (reduceMotion.value || slides.length < 2) return
+
+  timer = window.setTimeout(() => {
+    activeIndex.value = (activeIndex.value + 1) % slides.length
+    scheduleNext()
+  }, getSlideDuration(activeIndex.value))
 }
+
+const startAuto = () => scheduleNext()
+
 const stopAuto = () => {
-  if (timer) window.clearInterval(timer)
+  if (timer) window.clearTimeout(timer)
   timer = null
 }
 
@@ -197,40 +141,47 @@ const onMouseMove = (e) => {
   mouse.value.y = (e.clientY / innerHeight - 0.5) * 2
 }
 
-const bgStyle = (src) => {
-  const baseScale = isMobile.value ? 1.03 : 1.08
+const bgStyle = (slide) => {
+  const baseScale = isMobile.value ? 1.01 : 1.04
 
   if (reduceMotion.value) {
     return {
-      backgroundImage: `url('${src}')`,
+      backgroundImage: `url('${slide.src}')`,
+      backgroundPosition: slide.focus || 'center center',
       transform: `translate3d(0px, 0px, 0) scale(${baseScale})`
     }
   }
 
   if (isMobile.value) {
-    // мобильный: только лёгкий scroll-parallax
-    const y = scrollY.value * 0.06
+    const y = scrollY.value * 0.03
     return {
-      backgroundImage: `url('${src}')`,
+      backgroundImage: `url('${slide.src}')`,
+      backgroundPosition: slide.focus || 'center center',
       transform: `translate3d(0px, ${y}px, 0) scale(${baseScale})`
     }
   }
 
-  // desktop: scroll + mouse
-  const y = (scrollY.value * 0.12) + (mouse.value.y * 18)
-  const x = mouse.value.x * 10
+  const y = (scrollY.value * 0.08) + (mouse.value.y * 10)
+  const x = mouse.value.x * 6
   return {
-    backgroundImage: `url('${src}')`,
+    backgroundImage: `url('${slide.src}')`,
+    backgroundPosition: slide.focus || 'center center',
     transform: `translate3d(${x}px, ${y}px, 0) scale(${baseScale})`
   }
 }
 
 const scrollTo = (id) => {
   const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
+  if (!el) return
 
-const openAboutPage = () => router.push('/about')
+  const headerOffset = window.innerWidth < 768 ? 88 : 104
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset
+
+  window.scrollTo({
+    top: Math.max(top, 0),
+    behavior: 'smooth'
+  })
+}
 
 const detectDevice = () => {
   isMobile.value = window.matchMedia('(max-width: 1024px)').matches
@@ -249,40 +200,21 @@ onMounted(() => {
   if (reduceMotion.value) {
     els.forEach((el) => el.classList.add('is-visible'))
   } else {
-    const io = new IntersectionObserver(
+    revealObserver = new IntersectionObserver(
         (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible')),
         { threshold: 0.12 }
     )
-    els.forEach((el) => io.observe(el))
-    onBeforeUnmount(() => io.disconnect())
+    els.forEach((el) => revealObserver.observe(el))
   }
-
-  startAuto()
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', detectDevice)
   window.removeEventListener('scroll', onScroll)
   if (rafId) cancelAnimationFrame(rafId)
+  if (revealObserver) revealObserver.disconnect()
   stopAuto()
 })
-
-// particles layout (детерминированно)
-const particleStyle = (n) => {
-  const left = (n * 7) % 100
-  const top = (n * 13) % 70
-  const size = 6 + (n % 6) * 2
-  const delay = (n % 10) * 0.6
-  const dur = 10 + (n % 7) * 2
-  return {
-    left: `${left}%`,
-    top: `${top}%`,
-    width: `${size}px`,
-    height: `${size}px`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${dur}s`
-  }
-}
 </script>
 
 <style scoped>
@@ -311,13 +243,30 @@ const particleStyle = (n) => {
   transform: translateY(0);
 }
 
-.glass-card {
-  border-radius: 1rem;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.08);
+.hero-panel {
+  position: relative;
+  padding: 2rem 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(10, 13, 9, 0.32), rgba(13, 17, 13, 0.52)),
+    radial-gradient(circle at top, rgba(201, 169, 97, 0.15), transparent 46%),
+    radial-gradient(circle at bottom right, rgba(87, 126, 109, 0.12), transparent 34%);
   backdrop-filter: blur(10px);
-  padding: 1rem;
-  box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+.hero-panel-glow {
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), transparent 28%, transparent 74%, rgba(255, 255, 255, 0.05));
+}
+
+.hero-title {
+  text-shadow: 0 14px 42px rgba(0, 0, 0, 0.5);
+}
+
+.hero-copy {
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.44);
 }
 
 /* scroll dot */
@@ -330,36 +279,21 @@ const particleStyle = (n) => {
   100% { transform: translateY(0); opacity: 0.7; }
 }
 
-/* noise overlay */
-.noise {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+@media (min-width: 768px) {
+  .hero-panel {
+    padding: 2.5rem 2.75rem;
+  }
 }
 
-/* floating particles */
-.particle {
-  position: absolute;
-  border-radius: 999px;
-  background: rgba(201,169,97,0.18);
-  box-shadow: 0 0 24px rgba(201,169,97,0.25);
-  animation-name: floaty;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-@keyframes floaty {
-  0% { transform: translate3d(0, 0, 0); opacity: 0.55; }
-  50% { transform: translate3d(12px, -18px, 0); opacity: 0.9; }
-  100% { transform: translate3d(0, 0, 0); opacity: 0.55; }
-}
-
-/* Mobile optimization */
-@media (max-width: 1024px) {
-  .noise { opacity: 0.05; }
-  .particle { opacity: 0.35; box-shadow: 0 0 12px rgba(201,169,97,0.18); }
+@media (max-width: 640px) {
+  .hero-panel {
+    padding: 1.5rem 1rem;
+    border-radius: 1.5rem;
+  }
 }
 
 /* prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .particle { display: none; }
   .scroll-dot { animation: none; }
   .fade-enter-active, .fade-leave-active { transition: none; }
   .reveal { transition: none; transform: none; opacity: 1; }

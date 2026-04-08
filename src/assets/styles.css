@@ -1,12 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --bg-base: #f7f0e3;
+    --bg-soft: #fbf7ef;
+    --bg-sand: #efe2c8;
+    --surface: rgba(255, 252, 245, 0.82);
+    --surface-strong: rgba(255, 250, 241, 0.92);
+    --surface-dark: rgba(23, 29, 24, 0.9);
+    --line: rgba(145, 114, 67, 0.16);
+    --line-strong: rgba(145, 114, 67, 0.28);
+    --ink: #213229;
+    --ink-soft: #54655c;
+    --title: #2f6153;
+    --gold: #b88a42;
+    --gold-deep: #9e7231;
+    --jade: #4a6f61;
+    --clay: #996b4c;
+    --shadow-soft: 0 24px 70px rgba(64, 49, 26, 0.08);
+    --shadow-card: 0 22px 48px rgba(45, 39, 23, 0.12);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--ink);
+    background:
+        linear-gradient(180deg, #fbf7ef 0%, #f6efdf 48%, #fcf9f2 100%);
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::before {
+    background:
+        radial-gradient(circle at 15% 12%, rgba(184, 138, 66, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 16%, rgba(74, 111, 97, 0.1), transparent 26%),
+        linear-gradient(120deg, rgba(255,255,255,0.28), rgba(255,255,255,0)),
+        repeating-linear-gradient(
+            135deg,
+            rgba(130, 102, 63, 0.035) 0,
+            rgba(130, 102, 63, 0.035) 1px,
+            transparent 1px,
+            transparent 22px
+        );
+    opacity: 0.9;
+}
+
+body::after {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.55), transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(184, 138, 66, 0.08), transparent 30%);
+}
+
+#app {
+    min-height: 100vh;
+}
+
+.theme-page {
+    position: relative;
+    background: transparent;
+    color: var(--ink);
+}
+
+.display-font {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: -0.035em;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(184, 138, 66, 0.22);
+    background: rgba(255, 250, 241, 0.72);
+    box-shadow: 0 12px 28px rgba(64, 49, 26, 0.06);
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 600;
+    backdrop-filter: blur(12px);
+}
+
+.section-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 999px;
+    background: var(--gold);
+    box-shadow: 0 0 0 5px rgba(184, 138, 66, 0.12);
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.65rem, 5vw, 4.55rem);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    color: var(--title);
+}
+
+.section-lead {
+    max-width: 46rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+    line-height: 1.85;
+}
+
+.theme-card {
+    border-radius: 1.75rem;
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,250,241,0.7)),
+        linear-gradient(135deg, rgba(184,138,66,0.05), transparent 32%);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(14px);
+}
+
+.theme-card-hover {
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.theme-card-hover:hover {
+    transform: translateY(-6px);
+    border-color: rgba(184, 138, 66, 0.3);
+    box-shadow: 0 30px 68px rgba(56, 42, 19, 0.14);
+}
+
+.theme-card-dark {
+    border-radius: 1.9rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    background:
+        linear-gradient(160deg, rgba(33, 51, 43, 0.96), rgba(57, 90, 77, 0.88)),
+        radial-gradient(circle at top left, rgba(184,138,66,0.22), transparent 34%);
+    box-shadow: 0 28px 76px rgba(22, 27, 23, 0.28);
+    color: #f8f4eb;
+}
+
+.theme-button-primary,
+.theme-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.35rem;
+    padding: 0 1.35rem;
+    border-radius: 999px;
+    font-weight: 700;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.theme-button-primary {
+    background: var(--gold);
+    color: #18150f;
+    box-shadow: 0 18px 34px rgba(184, 138, 66, 0.22);
+}
+
+.theme-button-primary:hover {
+    background: var(--gold-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 22px 40px rgba(184, 138, 66, 0.28);
+}
+
+.theme-button-secondary {
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff8ef;
+    box-shadow: 0 16px 28px rgba(0,0,0,0.18);
+}
+
+.theme-button-secondary:hover {
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-1px);
+}
+
+.theme-button-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.2rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: rgba(255, 252, 245, 0.7);
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 14px 30px rgba(64,49,26,0.08);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.theme-button-light:hover {
+    transform: translateY(-1px);
+    border-color: rgba(184, 138, 66, 0.36);
+    box-shadow: 0 18px 36px rgba(64,49,26,0.12);
+}
+
+.theme-grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.18), transparent 72%);
+}
+
+.theme-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(184, 138, 66, 0.42), transparent);
+}
+
+.wave-animation {
+    animation: wave 15s linear infinite;
+}
 
 @keyframes wave {
     0% { background-position: 0 0; }
     100% { background-position: 1200px 0; }
 }
 
-.wave-animation {
-    animation: wave 15s linear infinite;
+@media (max-width: 767px) {
+    .section-title {
+        font-size: clamp(2.35rem, 11vw, 3.4rem);
+    }
+
+    .section-lead {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
 }

@@ -1,8 +1,7 @@
 <template>
-  <div class="bg-[#FAFAF8] text-[#2C2C2C]">
+  <div class="theme-page">
     <Header />
     <HeroSection />
-    <StatisticsSection />
     <AboutSection />
     <CulturalObjectsSection />
     <MapSection @open-modal="handleOpenModal" />
@@ -23,7 +22,6 @@ import { ref } from 'vue'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import HeroSection from '../components/HeroSection.vue'
-import StatisticsSection from '../components/StatisticsSection.vue'
 import AboutSection from '../components/AboutSection.vue'
 import CulturalObjectsSection from '../components/CulturalObjectsSection.vue'
 import MapSection from '../components/MapSection.vue'

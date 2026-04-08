@@ -1,18 +1,19 @@
 <template>
-  <section class="py-16 md:py-24 px-4 md:px-8 bg-white" id="objects">
-    <div class="max-w-7xl mx-auto">
+  <section class="scroll-mt-24 md:scroll-mt-28 relative overflow-hidden py-20 md:py-28 px-4 md:px-8" id="objects">
+    <div class="absolute inset-x-0 bottom-0 h-44 bg-[radial-gradient(circle_at_bottom,rgba(74,111,97,0.08),transparent_70%)] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative">
       <!-- Header -->
       <div class="text-center mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/30 bg-[#1B5B7F]/5 text-xs md:text-sm mb-4">
-          <span class="w-2 h-2 rounded-full bg-[#C9A961]"></span>
+        <div class="section-badge mx-auto">
+          <span class="section-dot"></span>
           Объекты комплекса
         </div>
 
-        <h2 class="text-4xl md:text-5xl font-bold text-[#1B5B7F] mb-4">
-          О комплексе «Отукен»
+        <h2 class="section-title mt-5 mb-5">
+          О комплексе «Өтүкен»
         </h2>
 
-        <p class="max-w-3xl mx-auto text-lg text-[#8B6F47] leading-relaxed">
+        <p class="section-lead">
           Это не один объект, а целая среда: культурные пространства, сервисы для гостей и площадки для событий.
           Нажмите на карточку — откроется описание.
         </p>
@@ -25,15 +26,15 @@
             :key="obj.id"
             type="button"
             @click="openModal(obj)"
-            class="group text-left rounded-2xl bg-[#FAFAF8] border border-[#C9A961]/15 shadow-sm hover:shadow-lg transition overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#C9A961]/50"
+            class="theme-card theme-card-hover group text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-[rgba(184,138,66,0.35)]"
         >
           <!-- media -->
-          <div class="relative h-44 overflow-hidden">
+          <div class="relative h-52 overflow-hidden">
             <img
                 v-if="coverImage(obj)"
                 :src="coverImage(obj)"
                 :alt="obj.title"
-                class="w-full h-full object-cover transform group-hover:scale-[1.05] transition duration-500"
+                class="w-full h-full object-cover transform group-hover:scale-[1.08] transition duration-700"
                 loading="lazy"
             />
             <div
@@ -50,30 +51,31 @@
               </div>
             </div>
 
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[rgba(7,10,8,0.92)] via-[rgba(7,10,8,0.3)] to-transparent"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(184,138,66,0.16),transparent_40%)]"></div>
 
             <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
-              <div class="text-white">
-                <div class="text-sm opacity-90">Объект</div>
-                <div class="text-lg font-bold leading-tight">{{ obj.title }}</div>
+              <div class="object-card-copy text-white">
+                <div class="object-card-kicker text-sm opacity-90">Объект</div>
+                <div class="object-card-title text-lg font-bold leading-tight">{{ obj.title }}</div>
               </div>
 
-              <div class="shrink-0 w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white/90 group-hover:bg-white/15 transition">
+              <div class="shrink-0 w-10 h-10 rounded-2xl bg-black/30 border border-white/18 flex items-center justify-center text-white/90 shadow-[0_12px_24px_rgba(0,0,0,0.16)] group-hover:bg-black/42 transition">
                 ↗
               </div>
             </div>
 
             <div
                 v-if="(obj.gallery?.length || 0) > 1"
-                class="absolute top-3 right-3 text-xs px-2.5 py-1 rounded-full bg-black/35 border border-white/15 text-white"
+                class="absolute top-3 right-3 text-xs px-2.5 py-1 rounded-full bg-black/56 border border-white/15 text-white shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
             >
               {{ obj.gallery.length }} фото
             </div>
           </div>
 
           <!-- content -->
-          <div class="p-5">
-            <p class="text-sm opacity-85 leading-relaxed line-clamp-3">
+          <div class="p-6">
+            <p class="text-sm text-[var(--ink-soft)] leading-7 line-clamp-3">
               {{ obj.short }}
             </p>
 
@@ -81,13 +83,13 @@
               <span
                   v-for="tag in obj.tags"
                   :key="tag"
-                  class="text-xs px-2.5 py-1 rounded-full border border-[#C9A961]/20 bg-white text-[#1B5B7F] font-semibold"
+                  class="text-xs px-2.5 py-1 rounded-full border border-[rgba(184,138,66,0.22)] bg-white/70 text-[var(--title)] font-semibold"
               >
                 {{ tag }}
               </span>
             </div>
 
-            <div class="mt-4 text-sm font-semibold text-[#1B5B7F] group-hover:text-[#0F3A4F] transition">
+            <div class="mt-5 text-sm font-semibold text-[var(--title)] group-hover:text-[var(--gold-deep)] transition">
               Подробнее →
             </div>
           </div>
@@ -105,12 +107,12 @@
           @keydown.esc="closeModal"
       >
         <!-- overlay -->
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeModal"></div>
+        <div class="absolute inset-0 bg-[rgba(17,22,18,0.68)] backdrop-blur-md" @click="closeModal"></div>
 
         <!-- panel: scrollable on mobile -->
         <div
             ref="panelRef"
-            class="relative w-full max-w-4xl rounded-2xl bg-[#FAFAF8] border border-[#C9A961]/20 shadow-2xl overflow-hidden"
+            class="theme-card relative w-full max-w-4xl overflow-hidden"
             :style="panelStyle"
         >
           <!-- SCROLL AREA -->
@@ -148,8 +150,8 @@
                 <!-- title + close -->
                 <div class="absolute bottom-4 left-5 right-5 flex items-start justify-between gap-4">
                   <div class="text-white">
-                    <div class="text-xs uppercase tracking-widest text-white/70">Объект комплекса</div>
-                    <div class="text-2xl md:text-3xl font-bold leading-tight mt-1">
+                    <div class="text-xs uppercase tracking-[0.24em] text-white/70">Объект комплекса</div>
+                    <div class="display-font text-3xl md:text-4xl leading-none mt-2">
                       {{ selected?.title }}
                     </div>
                   </div>
@@ -157,7 +159,7 @@
                   <button
                       type="button"
                       @click="closeModal"
-                      class="shrink-0 w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-white hover:bg-white/15 transition"
+                      class="shrink-0 w-10 h-10 rounded-2xl bg-white/12 border border-white/15 text-white hover:bg-white/18 transition"
                       aria-label="Закрыть"
                   >
                     ✕
@@ -172,7 +174,7 @@
                   <button
                       type="button"
                       @click.stop="prevImg"
-                      class="w-10 h-10 rounded-xl bg-black/30 border border-white/15 text-white hover:bg-black/40 transition"
+                    class="w-10 h-10 rounded-2xl bg-black/30 border border-white/15 text-white hover:bg-black/40 transition"
                       aria-label="Предыдущее фото"
                   >
                     ‹
@@ -185,7 +187,7 @@
                   <button
                       type="button"
                       @click.stop="nextImg"
-                      class="w-10 h-10 rounded-xl bg-black/30 border border-white/15 text-white hover:bg-black/40 transition"
+                    class="w-10 h-10 rounded-2xl bg-black/30 border border-white/15 text-white hover:bg-black/40 transition"
                       aria-label="Следующее фото"
                   >
                     ›
@@ -202,7 +204,7 @@
                       type="button"
                       @click="setImg(idx)"
                       class="shrink-0 w-20 h-14 rounded-xl overflow-hidden border transition"
-                      :class="idx === galleryIndex ? 'border-[#C9A961] ring-2 ring-[#C9A961]/35' : 'border-[#C9A961]/15 hover:border-[#C9A961]/40'"
+                      :class="idx === galleryIndex ? 'border-[var(--gold)] ring-2 ring-[rgba(184,138,66,0.3)]' : 'border-[rgba(184,138,66,0.16)] hover:border-[rgba(184,138,66,0.42)]'"
                       aria-label="Открыть фото"
                   >
                     <img :src="img" class="w-full h-full object-cover" :alt="selected.title" loading="lazy" />
@@ -215,16 +217,16 @@
             <div class="p-6 md:p-8">
               <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <div class="md:col-span-8">
-                  <div class="text-sm font-semibold text-[#1B5B7F] mb-2">Описание</div>
-                  <p class="text-sm md:text-base opacity-90 leading-relaxed">
+                  <div class="text-sm font-semibold text-[var(--title)] mb-2">Описание</div>
+                  <p class="text-sm md:text-base text-[var(--ink-soft)] leading-8">
                     {{ selected?.full }}
                   </p>
 
                   <div v-if="selected?.points?.length" class="mt-5 space-y-2">
-                    <div class="text-sm font-semibold text-[#1B5B7F]">Ключевые функции</div>
+                    <div class="text-sm font-semibold text-[var(--title)]">Ключевые функции</div>
                     <ul class="space-y-2">
-                      <li v-for="p in selected.points" :key="p" class="flex gap-3 text-sm opacity-90">
-                        <span class="mt-1 w-2.5 h-2.5 rounded-full bg-[#C9A961]"></span>
+                      <li v-for="p in selected.points" :key="p" class="flex gap-3 text-sm text-[var(--ink)]">
+                        <span class="mt-1 w-2.5 h-2.5 rounded-full bg-[var(--gold)]"></span>
                         <span>{{ p }}</span>
                       </li>
                     </ul>
@@ -232,19 +234,19 @@
                 </div>
 
                 <div class="md:col-span-4">
-                  <div class="rounded-2xl bg-white border border-[#C9A961]/15 p-5 shadow-sm">
-                    <div class="text-sm font-semibold text-[#1B5B7F]">Теги</div>
+                  <div class="theme-card p-5">
+                    <div class="text-sm font-semibold text-[var(--title)]">Теги</div>
                     <div class="mt-3 flex flex-wrap gap-2">
                       <span
                           v-for="tag in selected?.tags || []"
                           :key="tag"
-                          class="text-xs px-2.5 py-1 rounded-full border border-[#C9A961]/20 bg-[#FAFAF8] text-[#1B5B7F] font-semibold"
+                          class="text-xs px-2.5 py-1 rounded-full border border-[rgba(184,138,66,0.22)] bg-white/70 text-[var(--title)] font-semibold"
                       >
                         {{ tag }}
                       </span>
                     </div>
 
-                    <div class="mt-5 text-xs opacity-75 leading-relaxed">
+                    <div class="mt-5 text-xs text-[var(--ink-soft)] leading-relaxed">
                       Часть объектов находится в стадии проектирования/строительства — информация будет дополняться по мере реализации.
                     </div>
                   </div>
@@ -253,10 +255,10 @@
             </div>
 
             <!-- bottom line -->
-            <div class="px-6 md:px-8 py-4 border-t border-[#C9A961]/15 flex items-center justify-between gap-4">
+            <div class="px-6 md:px-8 py-4 border-t border-[rgba(184,138,66,0.16)] flex items-center justify-between gap-4">
               <button
                   type="button"
-                  class="text-sm font-semibold text-[#1B5B7F] hover:text-[#0F3A4F] transition"
+                  class="text-sm font-semibold text-[var(--title)] hover:text-[var(--gold-deep)] transition"
                   @click="closeModal"
               >
                 Закрыть
@@ -301,14 +303,14 @@ import hotel3 from '../assets/objects/hotel/3.jpeg'
 const objects = [
   {
     id: 'alley',
-    title: 'Аллея тувинских родов',
+    title: 'Аллея родовых групп Тувы',
     badge: 'АР',
     image: null,
     gallery: [alley1, alley2, alley3, alley4, alley5, alley6, alley7, alley8, alley9],
     short:
         'Центральное культурное пространство, объединяющее родовые группы и формирующее символику комплекса.',
     full:
-        'Аллея тувинских родов — смысловой центр «Отукена». Здесь соединяются традиции, идентичность и современная подача: место для церемоний, встреч, фестивальных активностей и культурных инициатив.',
+        'Аллея родовых групп Тувы — смысловой центр «Өтүкена». Здесь соединяются традиции, идентичность и современная подача: место для церемоний, встреч, фестивальных активностей и культурных инициатив.',
     tags: ['Культура', 'Идентичность', 'События'],
     points: [
       'Культурные и торжественные мероприятия',
@@ -393,7 +395,7 @@ const objects = [
     short:
         'Комфортное размещение туристов и участников событий. Основа круглогодичного функционирования комплекса.',
     full:
-        'Гостиничный комплекс повышает устойчивость проекта: размещение для гостей и участников мероприятий, удобные форматы проживания и возможность продлить пребывание на территории «Отукена».',
+        'Гостиничный комплекс повышает устойчивость проекта: размещение для гостей и участников мероприятий, удобные форматы проживания и возможность продлить пребывание на территории «Өтүкена».',
     tags: ['Проживание', 'Круглый год', 'Туризм'],
     points: [
       'Размещение гостей и участников событий',
@@ -561,6 +563,24 @@ onBeforeUnmount(() => {
   background: radial-gradient(circle at 25% 25%, rgba(201,169,97,0.35), transparent 55%),
   radial-gradient(circle at 80% 30%, rgba(27,91,127,0.35), transparent 55%),
   linear-gradient(135deg, #0F3A4F, #1B5B7F);
+}
+
+.object-card-copy {
+  max-width: min(100%, 15rem);
+  padding: 0.7rem 0.85rem 0.8rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(10, 13, 10, 0.62), rgba(10, 13, 10, 0.34)),
+    radial-gradient(circle at top left, rgba(184, 138, 66, 0.16), transparent 46%);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.16);
+}
+
+.object-card-kicker,
+.object-card-title {
+  color: rgba(255, 249, 241, 0.96);
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.36);
 }
 
 /* modal transition */
