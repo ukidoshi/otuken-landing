@@ -1,8 +1,15 @@
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg'
 import App from './App.vue'
-import router from './router'
+import { routes, scrollBehavior } from './router'
+import { indexableRoutePaths } from './seo/routeManifest'
+import './assets/styles.css'
 
-// ВАЖНО: верните импорт ваших глобальных стилей
-import './assets/styles.css'          // или './assets/main.css' / './assets/tailwind.css'
+export const createApp = ViteSSG(
+  App,
+  {
+    routes,
+    scrollBehavior
+  }
+)
 
-createApp(App).use(router).mount('#app')
+export const includedRoutes = () => indexableRoutePaths

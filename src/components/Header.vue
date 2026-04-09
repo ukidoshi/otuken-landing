@@ -1,141 +1,102 @@
 <template>
-  <nav
-      :class="[
-        'fixed top-0 left-0 right-0 z-50 px-3 md:px-6 py-3 transition-all duration-500',
-        isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
-      ]"
+  <header
+    :class="[
+      'fixed top-0 left-0 right-0 z-50 px-3 md:px-6 py-3 transition-all duration-500',
+      isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
+    ]"
   >
-    <div class="header-shell max-w-7xl mx-auto flex justify-between items-center gap-4">
+    <nav class="header-shell max-w-7xl mx-auto flex justify-between items-center gap-4" aria-label="Основная навигация">
       <RouterLink
-          to="/"
-          class="header-brand"
-          @click="closeMenu"
+        to="/"
+        class="header-brand"
+        @click="handleBrandClick"
       >
         ӨТҮКЕН
       </RouterLink>
 
       <div class="hidden md:flex items-center gap-3">
         <ul class="header-menu list-none items-center">
-        <li v-for="item in menuItems" :key="item.label">
-          <button
-              v-if="item.type === 'section'"
-              @click="goToMainOrScroll(item.target)"
+          <li v-for="item in menuItems" :key="item.label">
+            <button
+              type="button"
               class="header-link"
-          >
-            {{ item.label }}
-          </button>
-
-          <RouterLink
-              v-else
-              :to="item.target"
-              class="header-link"
-          >
-            {{ item.label }}
-          </RouterLink>
-        </li>
+              @click="navigateTo(item)"
+            >
+              {{ item.label }}
+            </button>
+          </li>
         </ul>
 
         <button
-            @click="goToMainOrScroll('contact')"
-            class="header-cta"
+          type="button"
+          class="header-cta"
+          @click="goToContact"
         >
           Связаться
         </button>
       </div>
 
       <button
-          type="button"
-          class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl border border-[rgba(184,138,66,0.2)] bg-[rgba(252,248,241,0.88)] text-[var(--title)] text-2xl shadow-[0_12px_28px_rgba(80,58,24,0.12)]"
-          aria-label="Открыть меню"
-          :aria-expanded="isMenuOpen"
-          @click="toggleMenu"
+        type="button"
+        class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl border border-[rgba(184,138,66,0.2)] bg-[rgba(252,248,241,0.88)] text-[var(--title)] text-2xl shadow-[0_12px_28px_rgba(80,58,24,0.12)]"
+        aria-label="Открыть меню"
+        :aria-expanded="isMenuOpen"
+        @click="toggleMenu"
       >
-        <span v-if="!isMenuOpen">☰</span>
-        <span v-else>✕</span>
+        <svg v-if="!isMenuOpen" aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+          <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <svg v-else aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
       </button>
-    </div>
+    </nav>
 
     <transition name="mobile-menu">
       <div
-          v-if="isMenuOpen"
-          class="md:hidden max-w-7xl mx-auto mt-3 rounded-[1.75rem] border border-[rgba(184,138,66,0.2)] bg-[rgba(252,248,241,0.97)] backdrop-blur-2xl overflow-hidden shadow-[0_24px_60px_rgba(80,58,24,0.1)]"
+        v-if="isMenuOpen"
+        class="md:hidden max-w-7xl mx-auto mt-3 rounded-[1.75rem] border border-[rgba(184,138,66,0.2)] bg-[rgba(252,248,241,0.98)] overflow-hidden shadow-[0_20px_44px_rgba(80,58,24,0.1)]"
       >
         <div class="px-3 py-3 space-y-1">
           <button
-              v-for="item in menuItems"
-              :key="`mobile-${item.label}`"
-              type="button"
-              class="w-full text-left px-4 py-3 rounded-xl text-[var(--ink)] font-medium hover:bg-[rgba(74,111,97,0.08)] transition"
-              @click="handleMobileAction(item)"
+            v-for="item in menuItems"
+            :key="`mobile-${item.label}`"
+            type="button"
+            class="block w-full text-left px-4 py-3 rounded-xl text-[var(--ink)] font-medium hover:bg-[rgba(74,111,97,0.08)] transition"
+            @click="navigateTo(item)"
           >
             {{ item.label }}
           </button>
 
           <button
-              type="button"
-              class="w-full mt-2 text-left px-4 py-3 rounded-xl bg-[var(--gold)] text-black font-semibold hover:bg-[var(--gold-deep)] transition shadow-[0_18px_30px_rgba(184,138,66,0.18)]"
-              @click="goToMainOrScroll('contact')"
+            type="button"
+            class="block w-full mt-2 text-left px-4 py-3 rounded-xl bg-[var(--gold)] text-black font-semibold hover:bg-[var(--gold-deep)] transition shadow-[0_18px_30px_rgba(184,138,66,0.18)]"
+            @click="goToContact"
           >
             Связаться
           </button>
         </div>
       </div>
     </transition>
-  </nav>
+  </header>
 </template>
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
+import { headerNavigation } from '../seo/site'
 
-const route = useRoute()
 const router = useRouter()
+const route = useRoute()
 const isMenuOpen = ref(false)
 const isHeaderVisible = ref(route.path !== '/')
 const isHomeRoute = computed(() => route.path === '/')
 
-const menuItems = [
-  { label: 'О комплексе', type: 'section', target: 'about' },
-  { label: 'Участки', type: 'section', target: 'map' },
-  { label: 'О нас', type: 'route', target: '/about' },
-  { label: 'Контакты', type: 'section', target: 'contact' }
-]
-
-const getHeaderOffset = () => (window.innerWidth < 768 ? 88 : 104)
-
-const scrollToSection = (sectionId) => {
-  const element = document.getElementById(sectionId)
-  if (!element) return
-
-  const top = element.getBoundingClientRect().top + window.scrollY - getHeaderOffset()
-  window.scrollTo({
-    top: Math.max(top, 0),
-    behavior: 'smooth'
-  })
+const getHeaderOffset = () => {
+  if (typeof window === 'undefined') return 104
+  return window.innerWidth < 768 ? 88 : 104
 }
-
-const goToMainOrScroll = async (sectionId) => {
-  closeMenu()
-
-  if (route.path !== '/') {
-    await router.push('/')
-    await nextTick()
-    requestAnimationFrame(() => scrollToSection(sectionId))
-    return
-  }
-  scrollToSection(sectionId)
-}
-
-const handleMobileAction = async (item) => {
-  closeMenu()
-
-  if (item.type === 'route') {
-    await router.push(item.target)
-    return
-  }
-
-  await goToMainOrScroll(item.target)
-}
+const menuItems = headerNavigation
 
 const toggleMenu = () => {
   if (!isHeaderVisible.value) return
@@ -146,7 +107,71 @@ const closeMenu = () => {
   isMenuOpen.value = false
 }
 
+const scrollToHash = (hash) => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return
+
+  const target = document.querySelector(hash)
+  if (!target) return
+
+  const headerOffset = getHeaderOffset()
+  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset
+
+  window.scrollTo({
+    top: Math.max(top, 0),
+    behavior: 'smooth'
+  })
+}
+
+const navigateTo = async (item) => {
+  closeMenu()
+
+  if (item.hash) {
+    if (route.path !== '/') {
+      await router.push({ path: '/', hash: item.hash })
+      return
+    }
+
+    if (route.hash !== item.hash) {
+      await router.replace({ hash: item.hash })
+    }
+
+    await nextTick()
+    scrollToHash(item.hash)
+    return
+  }
+
+  if (item.to) {
+    await router.push(item.to)
+  }
+}
+
+const goToContact = () => navigateTo({ hash: '#contact' })
+
+const handleBrandClick = async (event) => {
+  closeMenu()
+
+  if (route.path !== '/') return
+
+  event.preventDefault()
+
+  if (route.hash) {
+    await router.replace({ hash: '' })
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+let frameId = 0
+
 const updateHeaderVisibility = () => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    isHeaderVisible.value = !isHomeRoute.value
+    return
+  }
+
   if (!isHomeRoute.value) {
     isHeaderVisible.value = true
     return
@@ -164,6 +189,15 @@ const updateHeaderVisibility = () => {
   if (!isHeaderVisible.value) {
     closeMenu()
   }
+}
+
+const onScroll = () => {
+  if (frameId) return
+
+  frameId = window.requestAnimationFrame(() => {
+    updateHeaderVisibility()
+    frameId = 0
+  })
 }
 
 const handleResize = () => {
@@ -185,13 +219,14 @@ watch(
 
 onMounted(() => {
   updateHeaderVisibility()
-  window.addEventListener('scroll', updateHeaderVisibility, { passive: true })
+  window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', handleResize, { passive: true })
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', updateHeaderVisibility)
+  window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', handleResize)
+  if (frameId) window.cancelAnimationFrame(frameId)
 })
 </script>
 
@@ -201,12 +236,11 @@ onBeforeUnmount(() => {
   border-radius: 1.6rem;
   border: 1px solid rgba(184, 138, 66, 0.2);
   background:
-    linear-gradient(180deg, rgba(252, 249, 243, 0.94), rgba(247, 241, 231, 0.88)),
+    linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(247, 241, 231, 0.94)),
     radial-gradient(circle at top left, rgba(184, 138, 66, 0.14), transparent 38%),
     radial-gradient(circle at top right, rgba(74, 111, 97, 0.1), transparent 32%),
     linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 28%, transparent 72%, rgba(255, 255, 255, 0.12));
-  backdrop-filter: blur(24px);
-  box-shadow: 0 20px 48px rgba(81, 59, 24, 0.12);
+  box-shadow: 0 16px 34px rgba(81, 59, 24, 0.1);
 }
 
 .header-brand {
@@ -237,8 +271,11 @@ onBeforeUnmount(() => {
   align-items: center;
   min-height: 2.7rem;
   padding: 0 1rem;
+  border: 0;
   border-radius: 999px;
+  background: transparent;
   color: rgba(28, 42, 35, 0.92);
+  cursor: pointer;
   font-size: 0.95rem;
   font-weight: 600;
   text-shadow: none;
@@ -257,9 +294,11 @@ onBeforeUnmount(() => {
   justify-content: center;
   min-height: 3rem;
   padding: 0 1.25rem;
+  border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, #d6b56b, #c59a52);
   color: #17130c;
+  cursor: pointer;
   font-size: 0.95rem;
   font-weight: 700;
   box-shadow: 0 16px 28px rgba(184, 138, 66, 0.18);

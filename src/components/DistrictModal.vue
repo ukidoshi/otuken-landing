@@ -1,7 +1,7 @@
 <template>
   <div 
     v-if="isOpen" 
-    class="fixed inset-0 bg-[rgba(16,21,17,0.62)] backdrop-blur-md z-50 flex items-center justify-center p-4" 
+    class="fixed inset-0 bg-[rgba(16,21,17,0.74)] z-50 flex items-center justify-center p-4" 
     @click.self="closeModal"
   >
     <div class="theme-card rounded-[1.75rem] p-6 md:p-8 max-w-md w-full animate-in">
@@ -9,14 +9,15 @@
         <h2 class="display-font text-3xl text-[var(--title)] leading-none">{{ currentDistrict?.title }}</h2>
         <button 
           @click="closeModal" 
-          class="w-10 h-10 rounded-2xl bg-white/70 border border-[rgba(184,138,66,0.16)] text-xl text-[var(--ink-soft)] hover:text-[var(--gold)] transition"
+          class="w-10 h-10 rounded-2xl bg-white/70 border border-[rgba(184,138,66,0.16)] text-[var(--ink-soft)] hover:text-[var(--gold)] flex items-center justify-center transition"
         >
-          &times;
+          <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
         </button>
       </div>
       <div class="mb-6 text-sm leading-7 text-[var(--ink-soft)]">
         <p class="mb-3"><strong class="text-[var(--ink)]">Тип района:</strong> {{ currentDistrict?.type }}</p>
-        <p class="mb-3"><strong class="text-[var(--ink)]">Участков доступно:</strong> ~{{ currentDistrict?.lots }}</p>
         <div class="bg-[rgba(184,138,66,0.1)] p-4 rounded-2xl mb-4 border-l-4 border-[var(--gold)] text-[var(--ink)]">
           <p>{{ currentDistrict?.description }}</p>
         </div>
@@ -42,8 +43,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted } from 'vue'
 import { districts } from '../composables/useDistricts.js'
+import { lockBodyScroll, unlockBodyScroll } from '../composables/useBodyScrollLock.js'
+import { siteConfig } from '../seo/site'
 
 const props = defineProps({
   isOpen: {
@@ -68,7 +71,17 @@ const closeModal = () => {
 
 const contactDistrict = () => {
   const district = currentDistrict.value
-  alert(`Спасибо за интерес к кварталу "${district.title}"!\n\nМенеджер свяжется с вами в течение 24 часов.\n\nТелефон: +7 (983) 366-50-00\nEmail: info@otuken.ru`)
+  alert(`Спасибо за интерес к кварталу "${district.title}"!\n\nМы зафиксировали ваш интерес к району комплекса «Отукен».\n\nТелефон: ${siteConfig.phoneDisplay}\nEmail: ${siteConfig.email}`)
   closeModal()
 }
+
+onMounted(() => {
+  if (props.isOpen) {
+    lockBodyScroll()
+  }
+})
+
+onBeforeUnmount(() => {
+  unlockBodyScroll()
+})
 </script>

@@ -15,10 +15,14 @@
             <div class="mt-8 grid sm:grid-cols-2 gap-4">
               <div class="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
                 <div class="text-[var(--bg-sand)] font-semibold">Контакты</div>
-                <div class="mt-3 space-y-2 text-sm text-white/78">
-                  <div>+7 (913) 343-70-76</div>
-                  <div>otugen17@yandex.ru</div>
-                  <div>Кызыл, Республика Тыва</div>
+                <div class="mt-3 space-y-2 text-sm text-white/78 break-words">
+                  <a :href="`tel:${phoneHref}`" class="footer-contact-link hover:text-white transition">
+                    {{ siteConfig.phoneDisplay }}
+                  </a>
+                  <a :href="`mailto:${siteConfig.email}`" class="footer-contact-link hover:text-white transition">
+                    {{ siteConfig.email }}
+                  </a>
+                  <div>{{ siteConfig.addressRegion }}, {{ siteConfig.addressLocality }}</div>
                 </div>
               </div>
               <div class="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
@@ -32,36 +36,31 @@
             </div>
           </div>
 
-          <div class="grid sm:grid-cols-2 gap-6">
+          <div>
             <div>
-              <div class="text-[var(--bg-sand)] font-semibold mb-4">Навигация</div>
+              <div class="text-[var(--bg-sand)] font-semibold mb-4">Страницы проекта</div>
               <ul class="space-y-3 text-sm text-white/74">
-                <li><a href="#about" @click.prevent="scrollToSection('about')" class="hover:text-white transition">О проекте</a></li>
-                <li><a href="#objects" @click.prevent="scrollToSection('objects')" class="hover:text-white transition">Объекты</a></li>
-                <li><a href="#map" @click.prevent="scrollToSection('map')" class="hover:text-white transition">Карта районов</a></li>
-                <li><a href="#festival" @click.prevent="scrollToSection('festival')" class="hover:text-white transition">Фестиваль</a></li>
-                <li><a href="#gallery" @click.prevent="scrollToSection('gallery')" class="hover:text-white transition">Галерея</a></li>
+                <li v-for="item in pageNavigation" :key="item.to">
+                  <RouterLink :to="item.to" class="hover:text-white transition">
+                    {{ item.label }}
+                  </RouterLink>
+                </li>
               </ul>
             </div>
 
-            <div>
-              <div class="text-[var(--bg-sand)] font-semibold mb-4">Коммуникация</div>
-              <ul class="space-y-3 text-sm text-white/74">
-                <li><a href="#" class="hover:text-white transition">Instagram</a></li>
-                <li><a href="#" class="hover:text-white transition">VK</a></li>
-                <li><a href="#" class="hover:text-white transition">YouTube</a></li>
-                <li><a href="#" class="hover:text-white transition">WhatsApp</a></li>
-              </ul>
-
-              <div class="mt-6">
-                <button
-                    type="button"
-                    class="theme-button-primary w-full sm:w-auto"
-                    @click="scrollToSection('contact')"
-                >
-                  Связаться с нами
-                </button>
-              </div>
+            <div class="mt-6 grid sm:grid-cols-2 gap-4">
+              <a
+                :href="`tel:${phoneHref}`"
+                class="theme-button-primary w-full"
+              >
+                Позвонить
+              </a>
+              <a
+                :href="`mailto:${siteConfig.email}`"
+                class="theme-button-secondary footer-mail-button w-full"
+              >
+                Написать
+              </a>
             </div>
           </div>
         </div>
@@ -76,18 +75,21 @@
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router'
+import { pageNavigation, siteConfig } from '../seo/site'
+
 const currentYear = new Date().getFullYear()
-
-const scrollToSection = (sectionId) => {
-  const element = document.getElementById(sectionId)
-  if (!element) return
-
-  const headerOffset = window.innerWidth < 768 ? 88 : 104
-  const top = element.getBoundingClientRect().top + window.scrollY - headerOffset
-
-  window.scrollTo({
-    top: Math.max(top, 0),
-    behavior: 'smooth'
-  })
-}
+const phoneHref = siteConfig.phone.replace(/[^\d+]/g, '')
 </script>
+
+<style scoped>
+.footer-contact-link {
+  display: block;
+  width: 100%;
+}
+
+.footer-mail-button {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+}
+</style>

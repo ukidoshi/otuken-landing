@@ -1,350 +1,241 @@
 <template>
   <div class="theme-page">
     <Header />
+    <main>
+      <PageHero
+        :breadcrumbs="breadcrumbs"
+        badge="О нас"
+        title="Люди и идея проекта «Өтүкен»"
+        intro="«Өтүкен» создаётся как долгосрочный этнокультурный проект в Республике Тыва. За ним стоит команда, которая соединяет уважение к традициям, современный подход к территории и внимательную работу с будущей средой."
+        lead="Для нас важно, чтобы комплекс был не набором отдельных объектов, а цельным пространством культуры, отдыха, событий и гостеприимства, понятным и жителям республики, и гостям Тувы."
+        :highlights="[
+          'Проект в Республике Тыва',
+          'Культура, туризм и инфраструктура',
+          'Долгосрочное развитие территории'
+        ]"
+        :image="heroImage"
+        :image-mobile="heroImageMobile"
+        image-alt="Вид на территорию этнокультурного комплекса Өтүкен"
+      />
 
-    <!-- HERO -->
-    <section class="mt-16 md:mt-20 relative overflow-hidden bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F]">
-      <div class="absolute inset-0 opacity-30 wave-animation" :style="waveStyle"></div>
+      <section class="py-8 md:py-10 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.02fr_0.98fr] gap-6">
+          <article class="theme-card p-7 md:p-9">
+            <div class="text-sm uppercase tracking-[0.24em] text-[var(--clay)]/80">Наш подход</div>
+            <h2 class="display-font text-[2.35rem] md:text-[3.1rem] leading-none text-[var(--title)] mt-4">
+              Проект, который растёт из смысла, а не только из квадратных метров
+            </h2>
+            <p class="mt-5 text-[var(--ink-soft)] leading-8">
+              Мы смотрим на «Өтүкен» как на живую среду, где культурная память, архитектура, события и отдых
+              работают вместе. Поэтому для нас важны не только объекты сами по себе, но и то, какое впечатление
+              они создают, как связаны между собой и каким будет путь человека по территории.
+            </p>
+            <p class="mt-4 text-[var(--ink-soft)] leading-8">
+              Такой подход помогает строить комплекс последовательно: от сильной идеи и первых событий
+              к инфраструктуре, которая будет работать круглый год и поддерживать долгую жизнь проекта.
+            </p>
+          </article>
 
-      <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
-        <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-black/20 border border-[#C9A961]/30 text-white px-3 py-1 rounded-full text-xs md:text-sm mb-4">
-            <span class="w-2 h-2 rounded-full bg-[#C9A961]"></span>
-            Проект в стадии строительства
-          </div>
-
-          <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4">
-            О нас
-          </h1>
-
-          <p class="text-lg md:text-xl text-white/95 leading-relaxed mb-8">
-            «Өтүкен» — этнокультурный комплекс в Республике Тыва, создаваемый как точка притяжения для туризма,
-            культурных событий и инвестиций в устойчивое развитие региона.
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-3">
-            <button
-                @click="goHomeToHero"
-                class="bg-[#C9A961] text-black px-6 py-3 rounded-lg font-semibold hover:bg-[#B89A50] transition transform hover:-translate-y-1"
-            >
-              На главную
-            </button>
-            <button
-                @click="scrollToId('investment')"
-                class="border-2 border-[#C9A961] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#C9A961] hover:text-black transition"
-            >
-              Инвестиционная логика
-            </button>
-          </div>
+          <article class="theme-card-dark p-7 md:p-9">
+            <div class="text-sm uppercase tracking-[0.24em] text-white/72">Что для нас принципиально</div>
+            <div class="mt-5 grid sm:grid-cols-2 gap-4">
+              <div class="rounded-[1.35rem] border border-white/12 bg-white/8 p-4">
+                <div class="text-[var(--bg-sand)] font-semibold">Уважение к традиции</div>
+                <p class="mt-2 text-sm text-white/82 leading-7">
+                  Пространство должно чувствоваться тувинским по характеру, а не только по декоративным деталям.
+                </p>
+              </div>
+              <div class="rounded-[1.35rem] border border-white/12 bg-white/8 p-4">
+                <div class="text-[var(--bg-sand)] font-semibold">Современный комфорт</div>
+                <p class="mt-2 text-sm text-white/82 leading-7">
+                  Гостю должно быть удобно отдыхать, перемещаться, участвовать в событиях и возвращаться снова.
+                </p>
+              </div>
+              <div class="rounded-[1.35rem] border border-white/12 bg-white/8 p-4">
+                <div class="text-[var(--bg-sand)] font-semibold">Долгий горизонт</div>
+                <p class="mt-2 text-sm text-white/82 leading-7">
+                  Проект развивается поэтапно, но всегда с пониманием будущего масштаба и устойчивости.
+                </p>
+              </div>
+              <div class="rounded-[1.35rem] border border-white/12 bg-white/8 p-4">
+                <div class="text-[var(--bg-sand)] font-semibold">Открытость к партнёрству</div>
+                <p class="mt-2 text-sm text-white/82 leading-7">
+                  Мы видим комплекс как площадку для совместных инициатив, событий и инфраструктурных решений.
+                </p>
+              </div>
+            </div>
+          </article>
         </div>
+      </section>
 
-        <!-- quick cards -->
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-white/10 border border-white/15 rounded-2xl p-5 text-white">
-            <div class="text-[#C9A961] font-semibold mb-2">Культурный капитал</div>
-            <div class="text-sm text-white/90 leading-relaxed">
-              Сохранение и актуализация традиций через современную инфраструктуру и события.
-            </div>
-          </div>
-          <div class="bg-white/10 border border-white/15 rounded-2xl p-5 text-white">
-            <div class="text-[#C9A961] font-semibold mb-2">Туристический поток</div>
-            <div class="text-sm text-white/90 leading-relaxed">
-              Комплекс проектируется как объект туристической инфраструктуры и круглогодичных активностей.
-            </div>
-          </div>
-          <div class="bg-white/10 border border-white/15 rounded-2xl p-5 text-white">
-            <div class="text-[#C9A961] font-semibold mb-2">Партнёрства</div>
-            <div class="text-sm text-white/90 leading-relaxed">
-              Открыты к сотрудничеству с бизнесом и институциями в формате инвестиций и совместных проектов.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      <ContentSections :sections="sections" />
 
-    <!-- INVESTMENT THESIS -->
-    <section id="investment" class="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-        <div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">Инвестиционная логика «Өтүкена»</h2>
-          <p class="text-base md:text-lg opacity-90 leading-relaxed mb-6">
-            Мы строим комплекс как понятную систему: культурное ядро + событийная программа + комфортная инфраструктура.
-            Это создаёт устойчивую экономику проекта: регулярные мероприятия, сервисы для гостей, рабочие места и рост
-            туристической привлекательности территории.
-          </p>
-
-          <div class="space-y-3">
-            <div class="flex gap-3">
-              <div class="mt-1 w-2.5 h-2.5 rounded-full bg-[#C9A961]"></div>
-              <div>
-                <div class="font-semibold">Устойчивый спрос</div>
-                <div class="text-sm opacity-85">События республиканского и международного масштаба + семейный отдых.</div>
-              </div>
+      <section class="py-8 md:py-10 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-10">
+            <div class="section-badge mx-auto">
+              <span class="section-dot"></span>
+              Команда проекта
             </div>
-
-            <div class="flex gap-3">
-              <div class="mt-1 w-2.5 h-2.5 rounded-full bg-[#C9A961]"></div>
-              <div>
-                <div class="font-semibold">Инфраструктура как актив</div>
-                <div class="text-sm opacity-85">Юрточный городок, гостиница, площадки, гастро- и торговые зоны.</div>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div class="mt-1 w-2.5 h-2.5 rounded-full bg-[#C9A961]"></div>
-              <div>
-                <div class="font-semibold">Культурная идентичность</div>
-                <div class="text-sm opacity-85">Проект усиливает бренд региона и ценность локальных ремёсел и традиций.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- placeholder visual -->
-        <div class="bg-white rounded-2xl shadow-lg border border-[#C9A961]/15 overflow-hidden">
-<!--          <div class="p-6 border-b border-[#C9A961]/10">-->
-<!--            <div class="text-sm font-semibold text-[#1B5B7F]">Схема развития (плейсхолдер)</div>-->
-<!--            <div class="text-xs opacity-70 mt-1">Позже можно заменить на реальную инфографику/рендер.</div>-->
-<!--          </div>-->
-
-          <div class="p-6">
-            <div class="grid grid-cols-2 gap-4">
-              <div class="rounded-xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] p-4 text-white">
-                <div class="text-[#C9A961] font-semibold text-sm">Ядро</div>
-                <div class="text-sm mt-1 opacity-90">Культура, традиции, смысл</div>
-              </div>
-              <div class="rounded-xl bg-[#FAFAF8] border border-[#C9A961]/15 p-4">
-                <div class="text-[#1B5B7F] font-semibold text-sm">Сервис</div>
-                <div class="text-sm mt-1 opacity-85">Отдых, питание, торговля</div>
-              </div>
-              <div class="rounded-xl bg-[#FAFAF8] border border-[#C9A961]/15 p-4">
-                <div class="text-[#1B5B7F] font-semibold text-sm">События</div>
-                <div class="text-sm mt-1 opacity-85">Фестивали и программы</div>
-              </div>
-              <div class="rounded-xl bg-gradient-to-br from-[#C9A961] to-[#B89A50] p-4 text-black">
-                <div class="font-semibold text-sm">Экономика</div>
-                <div class="text-sm mt-1 opacity-90">Поток, рабочие места, партнёрства</div>
-              </div>
-            </div>
-
-            <div class="mt-5 text-sm opacity-85 leading-relaxed">
-              Модель позволяет масштабировать проект по очередям: сначала — события и культурное пространство,
-              затем — расширение инфраструктуры и сервисов.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STORY / TIMELINE -->
-    <section class="bg-white border-y border-[#C9A961]/10">
-      <div class="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Как создаётся «Өтүкен»</h2>
-        <p class="text-base md:text-lg opacity-90 leading-relaxed mb-10 max-w-3xl">
-          Проект развивается по понятной дорожной карте: от концепции и первых событий — к полноценной инфраструктуре,
-          которая будет работать круглый год.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-5">
-            <div class="text-xs inline-flex items-center gap-2 bg-[#1B5B7F]/10 text-[#1B5B7F] px-3 py-1 rounded-full font-semibold">
-              Этап 1
-            </div>
-            <div class="mt-3 font-bold text-lg">Концепция</div>
-            <div class="text-sm opacity-85 mt-2 leading-relaxed">
-              Формирование идеи комплекса: культурное ядро, туристическая функция, интеграция традиций и современности.
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-5">
-            <div class="text-xs inline-flex items-center gap-2 bg-[#1B5B7F]/10 text-[#1B5B7F] px-3 py-1 rounded-full font-semibold">
-              Этап 2
-            </div>
-            <div class="mt-3 font-bold text-lg">Событийный запуск</div>
-            <div class="text-sm opacity-85 mt-2 leading-relaxed">
-              Старт с мероприятий, которые “включают” интерес и формируют традицию ежегодных программ.
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-5">
-            <div class="text-xs inline-flex items-center gap-2 bg-[#1B5B7F]/10 text-[#1B5B7F] px-3 py-1 rounded-full font-semibold">
-              Этап 3
-            </div>
-            <div class="mt-3 font-bold text-lg">Инфраструктура</div>
-            <div class="text-sm opacity-85 mt-2 leading-relaxed">
-              Развитие объектов: площадки, зоны отдыха, этно-проживание, торговля и гастрономия.
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-5">
-            <div class="text-xs inline-flex items-center gap-2 bg-[#1B5B7F]/10 text-[#1B5B7F] px-3 py-1 rounded-full font-semibold">
-              Этап 4
-            </div>
-            <div class="mt-3 font-bold text-lg">Масштабирование</div>
-            <div class="text-sm opacity-85 mt-2 leading-relaxed">
-              Партнёрства, новые форматы событий и расширение сервисов для постоянного туристического потока.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHAT INSIDE -->
-    <section class="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-        <div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">Что будет в комплексе</h2>
-          <p class="text-base md:text-lg opacity-90 leading-relaxed mb-6">
-            «Өтүкен» проектируется как среда, в которой одинаково комфортно:
-            провести фестиваль, приехать на выходные семьёй, остановиться туристом, заниматься спортом и знакомиться с культурой.
-          </p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div v-for="item in infra" :key="item.title" class="rounded-xl bg-white border border-[#C9A961]/15 shadow-sm p-4">
-              <div class="font-semibold text-[#1B5B7F]">{{ item.title }}</div>
-              <div class="text-sm opacity-85 mt-1 leading-relaxed">{{ item.desc }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="rounded-2xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] p-7 text-white shadow-lg border border-white/10">
-          <div class="text-[#C9A961] font-semibold mb-2">Фокус на доходности и смысле</div>
-          <div class="text-sm md:text-base opacity-95 leading-relaxed">
-            Мы сознательно соединяем культурную миссию с рыночной логикой: события формируют трафик,
-            инфраструктура удерживает гостей, а локальные ремёсла и сервисы получают стабильный спрос.
-          </div>
-
-          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="rounded-xl bg-white/10 border border-white/15 p-4">
-              <div class="text-sm font-semibold text-[#C9A961]">Поток</div>
-              <div class="text-sm mt-1 opacity-90">мероприятия + туризм</div>
-            </div>
-            <div class="rounded-xl bg-white/10 border border-white/15 p-4">
-              <div class="text-sm font-semibold text-[#C9A961]">Сервисы</div>
-              <div class="text-sm mt-1 opacity-90">питание, проживание, торговля</div>
-            </div>
-            <div class="rounded-xl bg-white/10 border border-white/15 p-4">
-              <div class="text-sm font-semibold text-[#C9A961]">Культура</div>
-              <div class="text-sm mt-1 opacity-90">сохранение и популяризация</div>
-            </div>
-            <div class="rounded-xl bg-white/10 border border-white/15 p-4">
-              <div class="text-sm font-semibold text-[#C9A961]">Партнёрства</div>
-              <div class="text-sm mt-1 opacity-90">инвесторы и проекты</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOUNDERS -->
-    <section class="bg-white border-y border-[#C9A961]/10">
-      <div class="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Организаторы проекта</h2>
-        <p class="text-base md:text-lg opacity-90 leading-relaxed mb-10 max-w-3xl">
-          «Өтүкен» создаётся как долгосрочный проект. Организаторы отвечают за концепцию, развитие инфраструктуры,
-          событийную программу и партнёрства.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-6 flex gap-5 items-start">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] flex items-center justify-center text-white font-bold">
-              AS
-            </div>
-            <div>
-              <div class="text-lg font-bold">Салчак Алимдорж Санданович</div>
-              <div class="text-sm text-[#1B5B7F] font-semibold mt-1">Организатор проекта</div>
-              <div class="text-sm opacity-85 mt-2 leading-relaxed">
-                Отвечает за организационное развитие проекта, партнёрскую модель и инвестиционную коммуникацию.
-              </div>
-            </div>
-          </div>
-          <div class="rounded-2xl border border-[#C9A961]/15 shadow-sm bg-[#FAFAF8] p-6 flex gap-5 items-start">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C9A961] to-[#B89A50] flex items-center justify-center text-black font-bold">
-              RS
-            </div>
-            <div>
-              <div class="text-lg font-bold">Салчак Розаля Дадар-ооловна</div>
-              <div class="text-sm text-[#1B5B7F] font-semibold mt-1">Организатор проекта</div>
-              <div class="text-sm opacity-85 mt-2 leading-relaxed">
-                Курирует развитие концепции этнокомплекса и культурно-событийное направление.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-16">
-      <div class="rounded-2xl bg-gradient-to-br from-[#0F3A4F] to-[#1B5B7F] p-8 md:p-10 text-white border border-white/10 shadow-lg">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div class="max-w-2xl">
-            <h3 class="text-2xl md:text-3xl font-bold mb-2">Вернуться на главную страницу</h3>
-            <p class="text-sm md:text-base opacity-90 leading-relaxed">
-              На главной вы можете посмотреть участки, карту и другие разделы об комплексе.
+            <h2 class="section-title mt-5 mb-5">
+              Люди, которые ведут «Өтүкен»
+            </h2>
+            <p class="section-lead">
+              Проект развивается как совместная работа над территорией, её культурным смыслом,
+              инфраструктурой и будущим ритмом жизни.
             </p>
           </div>
-          <div class="flex gap-3 flex-col sm:flex-row">
-            <button
-                @click="goHomeToHero"
-                class="bg-[#C9A961] text-black px-7 py-3 rounded-lg font-semibold hover:bg-[#B89A50] transition transform hover:-translate-y-1"
+
+          <div class="grid md:grid-cols-2 gap-5">
+            <article
+              v-for="person in people"
+              :key="person.name"
+              class="theme-card p-6 md:p-7"
             >
-              На главную
-            </button>
-            <button
-                @click="scrollToTop"
-                class="border-2 border-[#C9A961] text-white px-7 py-3 rounded-lg font-semibold hover:bg-[#C9A961] hover:text-black transition"
-            >
-              В начало страницы
-            </button>
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-[1.2rem] bg-[linear-gradient(135deg,#d7b76a,#bb9454)] text-[#17130c] font-bold flex items-center justify-center shrink-0">
+                  {{ person.initials }}
+                </div>
+                <div>
+                  <h3 class="text-2xl font-semibold text-[var(--title)]">
+                    {{ person.name }}
+                  </h3>
+                  <div class="mt-1 text-sm uppercase tracking-[0.18em] text-[var(--clay)]/80">
+                    {{ person.role }}
+                  </div>
+                </div>
+              </div>
+              <p class="mt-5 text-[var(--ink-soft)] leading-8">
+                {{ person.text }}
+              </p>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
+      <FaqSection
+        :items="faq"
+        lead="Короткие ответы о команде, логике проекта и том, как следить за развитием комплекса."
+      />
+
+      <PageCta :cta="cta" />
+    </main>
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
+import PageHero from '../components/PageHero.vue'
+import ContentSections from '../components/ContentSections.vue'
+import FaqSection from '../components/FaqSection.vue'
+import PageCta from '../components/PageCta.vue'
+import { useSeoPage } from '../composables/useSeoPage'
+import overview from '../assets/optimized/hero/overview.webp'
+import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
+import { makeBreadcrumbSchema, makeFaqSchema } from '../seo/schema'
 
-const router = useRouter()
+const heroImage = overview
+const heroImageMobile = overviewMobile
 
-const waveStyle = computed(() => {
-  const svg = encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,250 T1200,300 L1200,600 L0,600 Z" fill="rgba(201,169,97,0.12)" opacity="0.35"/></svg>'
-  )
-  return {
-    backgroundImage: `url('data:image/svg+xml,${svg}')`,
-    backgroundRepeat: 'repeat-x'
-  }
-})
-
-const infra = [
-  { title: 'Аллея родовых групп Тувы', desc: 'Культурное пространство и символ единства традиций.' },
-  { title: 'Сцена и фестивали', desc: 'Площадка для событий республиканского и международного уровня.' },
-  { title: 'Юрточный городок', desc: 'Этно-проживание и погружение в традиционный быт.' },
-  { title: 'Гостиница', desc: 'Комфортное размещение для туристов и участников мероприятий.' },
-  { title: 'Ипподром', desc: 'Традиционные конные соревнования и праздники.' },
-  { title: 'Спорт и активность', desc: 'Площадки и зоны для спорта и семейного отдыха.' },
-  { title: 'Торговля и сувениры', desc: 'Поддержка локальных ремёсел и предпринимательства.' },
-  { title: 'Гастро и торжества', desc: 'Ресторан/площадки для мероприятий и знакомства с кухней региона.' }
+const breadcrumbs = [
+  { label: 'Главная', to: '/' },
+  { label: 'О нас' }
 ]
 
-const scrollToId = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
+const sections = [
+  {
+    title: 'Зачем создаётся «Өтүкен»',
+    paragraphs: [
+      'Проект задуман как пространство, где культура Тувы раскрывается не через отдельный музейный жест, а через всю среду: маршруты, события, гостевые форматы, места отдыха и общественные точки притяжения.',
+      'Нам важно, чтобы комплекс был интересен и жителям региона, и туристам, и партнёрам, которые смотрят на Туву как на территорию с сильным культурным характером и большим потенциалом развития.'
+    ]
+  },
+  {
+    title: 'Как мы видим развитие территории',
+    paragraphs: [
+      'Мы рассматриваем проект как поэтапное, но цельное развитие. Сначала пространство должно начать жить через атмосферу, культурные сценарии и первые события. Затем вокруг этого ядра усиливаются инфраструктура, сервисы и новые точки притяжения.',
+      'Такой путь помогает не потерять характер проекта и сделать каждое следующее решение осмысленным: от архитектурных акцентов до гостевого контура и событийной программы.'
+    ],
+    cards: [
+      {
+        title: 'Смысловое ядро',
+        text: 'Культура, родовая память, уважение к традиции и сильная идентичность территории.'
+      },
+      {
+        title: 'Живая программа',
+        text: 'Фестивали, встречи и сценарии, которые наполняют пространство реальной жизнью.'
+      },
+      {
+        title: 'Устойчивая среда',
+        text: 'Инфраструктура, гостеприимство и сервисы, которые делают проект долгосрочным.'
+      }
+    ]
+  },
+  {
+    title: 'С кем мы говорим через этот проект',
+    paragraphs: [
+      'Для туристов «Өтүкен» — это возможность ближе познакомиться с культурой Тувы через пространство и личный опыт. Для семей — новая локация отдыха и досуга. Для партнёров — площадка для событий, сервисов и совместных инициатив. Для инвесторов — территория, в которой культурный смысл подкреплён логикой развития.'
+    ],
+    list: [
+      'С жителями Тувы, которым важно узнаваемое и уважительное пространство',
+      'С туристами, ищущими неформальный и содержательный опыт',
+      'С организаторами событий и культурных программ',
+      'С партнёрами, которым близка идея долгосрочного развития территории'
+    ]
+  }
+]
+
+const people = [
+  {
+    initials: 'AS',
+    name: 'Салчак Алимдорж Санданович',
+    role: 'Организатор проекта',
+    text: 'Отвечает за организационное развитие проекта, партнёрские связи и выстраивание устойчивой модели роста комплекса.'
+  },
+  {
+    initials: 'RS',
+    name: 'Салчак Розаля Дадар-ооловна',
+    role: 'Организатор проекта',
+    text: 'Курирует развитие концепции этнокомплекса, культурную линию проекта и событийные сценарии будущей территории.'
+  }
+]
+
+const faq = [
+  {
+    question: 'О чём этот раздел?',
+    answer: 'Он рассказывает о людях, подходе и принципах, с которыми развивается проект «Өтүкен».'
+  },
+  {
+    question: 'Что здесь можно понять о проекте?',
+    answer: 'Здесь раскрывается внутренняя логика «Өтүкен»: кто ведёт проект, на каких принципах он строится и каким мы видим характер будущей территории.'
+  },
+  {
+    question: 'Можно ли связаться с командой проекта напрямую?',
+    answer: 'Да. Внизу сайта указаны актуальные контакты команды: телефон, почта и режим связи.'
+  }
+]
+
+const cta = {
+  title: 'Следить за развитием проекта',
+  text:
+    'Если хотите быть в курсе новых материалов и важных обновлений по «Өтүкен», откройте страницу новостей или свяжитесь с командой напрямую.',
+  primary: { label: 'Открыть новости', to: '/novosti' },
+  secondary: { label: 'Связаться с нами', to: { path: '/', hash: '#contact' } }
 }
 
-const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
-
-const goHomeToHero = async () => {
-  await router.push('/')
-  await nextTick()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+useSeoPage(
+  {
+    title: 'О нас — команда и идея проекта «Отукен»',
+    description:
+      'Страница «О нас» проекта «Отукен» / «Өтүкен»: команда, принципы развития этнокультурного комплекса и подход к формированию современной среды в Республике Тыва.',
+    path: '/o-nas',
+    image: heroImage
+  },
+  [
+    makeBreadcrumbSchema(breadcrumbs),
+    makeFaqSchema(faq)
+  ]
+)
 </script>

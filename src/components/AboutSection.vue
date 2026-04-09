@@ -1,7 +1,6 @@
 <template>
   <section class="scroll-mt-24 md:scroll-mt-28 relative overflow-hidden py-20 md:py-28 px-4 md:px-8" id="about">
     <div class="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(184,138,66,0.14),transparent_72%)] pointer-events-none"></div>
-    <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-[rgba(74,111,97,0.08)] blur-3xl pointer-events-none"></div>
     <div class="max-w-7xl mx-auto relative">
       <div class="text-center mb-14">
         <div class="section-badge mx-auto">
@@ -111,8 +110,7 @@
 
         <div class="theme-card-dark p-8 md:p-10 relative overflow-hidden">
           <div class="absolute inset-0 opacity-40 pointer-events-none">
-            <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-[rgba(184,138,66,0.24)] blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[rgba(130,171,151,0.18)] blur-3xl"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(184,138,66,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(130,171,151,0.14),transparent_30%)]"></div>
           </div>
 
           <div class="relative z-10">
@@ -127,11 +125,11 @@
             </p>
 
             <div class="mt-7 grid grid-cols-2 gap-3">
-              <div class="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur-md">
+              <div class="rounded-2xl border border-white/12 bg-white/8 p-4">
                 <div class="text-[var(--bg-sand)] font-semibold text-sm">Фокус</div>
                 <div class="text-sm mt-2 text-white/90">туризм и события</div>
               </div>
-              <div class="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur-md">
+              <div class="rounded-2xl border border-white/12 bg-white/8 p-4">
                 <div class="text-[var(--bg-sand)] font-semibold text-sm">Формат</div>
                 <div class="text-sm mt-2 text-white/90">по очередям</div>
               </div>
@@ -139,17 +137,17 @@
 
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
               <button
-                  @click="scrollTo('objects')"
-                  class="theme-button-primary w-full sm:w-auto"
+                @click="scrollTo('objects')"
+                class="theme-button-primary w-full sm:w-auto"
               >
                 Посмотреть объекты
               </button>
 
               <button
-                  @click="goAboutPage"
-                  class="theme-button-secondary w-full sm:w-auto"
+                @click="scrollTo('map')"
+                class="theme-button-secondary w-full sm:w-auto"
               >
-                Подробнее о проекте
+                Посмотреть карту
               </button>
             </div>
           </div>
@@ -160,12 +158,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const goAboutPage = () => router.push('/about')
-
 const scrollTo = (id) => {
   const el = document.getElementById(id)
   if (!el) return

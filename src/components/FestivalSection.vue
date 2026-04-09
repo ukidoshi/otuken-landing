@@ -3,8 +3,7 @@
     <div class="max-w-7xl mx-auto relative">
       <div class="theme-card-dark p-8 md:p-12 overflow-hidden">
         <div class="theme-grid-overlay opacity-40"></div>
-        <div class="absolute -top-16 right-10 w-72 h-72 rounded-full bg-[rgba(184,138,66,0.18)] blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-16 left-0 w-72 h-72 rounded-full bg-[rgba(122,168,145,0.14)] blur-3xl pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(184,138,66,0.16),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(122,168,145,0.12),transparent_28%)] pointer-events-none"></div>
 
         <div class="relative z-10 grid lg:grid-cols-[0.95fr_1.05fr] gap-8 lg:gap-12 items-start">
           <div>
@@ -76,8 +75,7 @@
   color: rgba(255, 247, 234, 0.96);
   font-size: 0.88rem;
   font-weight: 700;
-  box-shadow: 0 14px 28px rgba(10, 15, 12, 0.16);
-  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 22px rgba(10, 15, 12, 0.14);
   text-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
@@ -87,8 +85,7 @@
   background:
     linear-gradient(180deg, rgba(27, 36, 31, 0.74), rgba(27, 36, 31, 0.58)),
     radial-gradient(circle at top left, rgba(184, 138, 66, 0.16), transparent 42%);
-  box-shadow: 0 18px 34px rgba(10, 15, 12, 0.16);
-  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 30px rgba(10, 15, 12, 0.14);
 }
 
 .festival-panel-title {
@@ -122,7 +119,6 @@
     linear-gradient(180deg, rgba(22, 31, 26, 0.44), rgba(22, 31, 26, 0.28)),
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 42%);
   color: rgba(255, 250, 242, 0.92);
-  box-shadow: 0 14px 26px rgba(10, 15, 12, 0.12);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 22px rgba(10, 15, 12, 0.1);
 }
 </style>

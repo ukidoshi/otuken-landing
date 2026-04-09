@@ -13,7 +13,6 @@ export const districts = {
     labelAngle: -12,
 
     type: 'Спортивный',
-    lots: 80,
     status: 'sold',
     color: '#2563eb',
     polygon: '324 285,359 138,503 122,514 155,664 157,664 176,576 176, 577 185',
@@ -30,7 +29,6 @@ export const districts = {
     labelAngle: 0,
 
     type: 'Премиум',
-    lots: 100,
     status: 'active',
     color: '#c9a961',
     polygon: '478 235, 600 185, 669 187, 818 473, 471 440, 426 349, 507 309',
@@ -47,7 +45,6 @@ export const districts = {
     labelAngle: -40,
 
     type: 'Этнографический',
-    lots: 90,
     status: 'active',
     color: '#4a9b6f',
     polygon: '296 310, 383 274, 456 416, 348 504, 308 560, 245 514, 266 486, 242 469, 270 429, 339 373, 303 328',
@@ -64,7 +61,6 @@ export const districts = {
     labelAngle: 0,
 
     type: 'Конный спорт',
-    lots: 30,
     status: 'building',
     color: '#8B4513',
     polygon: '1 586, 91 632, 89 675, 1 662',
@@ -81,7 +77,6 @@ export const districts = {
     labelAngle: 0,
 
     type: 'Семейный',
-    lots: 140,
     status: 'active',
     color: '#0891b2',
     polygon: '57 406, 294 310, 301 328, 282 336, 291 359, 118 430, 120 435, 173 471, 187 452, 229 482, 215 502, 308 568, 353 507, 459 422, 468 440, 367 523, 289 632, 252 702, 96 676, 98 621, 58 598, 100 513, 116 491, 81 466',
@@ -98,7 +93,6 @@ export const districts = {
     labelAngle: 63,
 
     type: 'Семейный',
-    lots: 140,
     status: 'otuken',
     color: '#aaaaa0',
     polygon: '681 159, 729 87, 1193 130, 1139 495, 847 478',

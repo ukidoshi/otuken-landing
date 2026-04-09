@@ -10,7 +10,7 @@
         </div>
 
         <h2 class="section-title mt-5 mb-5">
-          О комплексе «Өтүкен»
+          Ключевые объекты «Өтүкен»
         </h2>
 
         <p class="section-lead">
@@ -30,15 +30,22 @@
         >
           <!-- media -->
           <div class="relative h-52 overflow-hidden">
-            <img
-                v-if="coverImage(obj)"
-                :src="coverImage(obj)"
-                :alt="obj.title"
-                class="w-full h-full object-cover transform group-hover:scale-[1.08] transition duration-700"
-                loading="lazy"
-            />
+            <picture v-if="coverImage(obj)">
+              <source
+                  v-if="coverImageMobile(obj)"
+                  :srcset="coverImageMobile(obj)"
+                  media="(max-width: 767px)"
+              />
+              <img
+                  :src="coverImage(obj)"
+                  :alt="obj.title"
+                  class="w-full h-full object-cover transform group-hover:scale-[1.03] transition duration-500"
+                  loading="lazy"
+                  decoding="async"
+              />
+            </picture>
             <div
-                v-else
+                v-if="!coverImage(obj)"
                 class="w-full h-full flex items-center justify-center placeholder-bg"
             >
               <div class="text-center">
@@ -61,7 +68,21 @@
               </div>
 
               <div class="shrink-0 w-10 h-10 rounded-2xl bg-black/30 border border-white/18 flex items-center justify-center text-white/90 shadow-[0_12px_24px_rgba(0,0,0,0.16)] group-hover:bg-black/42 transition">
-                ↗
+                <svg
+                    aria-hidden="true"
+                    class="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                      d="M7 17L17 7M9 7H17V15"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                  />
+                </svg>
               </div>
             </div>
 
@@ -107,7 +128,7 @@
           @keydown.esc="closeModal"
       >
         <!-- overlay -->
-        <div class="absolute inset-0 bg-[rgba(17,22,18,0.68)] backdrop-blur-md" @click="closeModal"></div>
+        <div class="absolute inset-0 bg-[rgba(17,22,18,0.74)]" @click="closeModal"></div>
 
         <!-- panel: scrollable on mobile -->
         <div
@@ -139,7 +160,7 @@
                       {{ selected?.badge }}
                     </div>
                     <div class="mt-2 text-white/90 text-sm font-semibold">
-                      Изображение объекта (плейсхолдер)
+                      Изображение объекта появится здесь
                     </div>
                   </div>
                 </div>
@@ -255,7 +276,7 @@
             </div>
 
             <!-- bottom line -->
-            <div class="px-6 md:px-8 py-4 border-t border-[rgba(184,138,66,0.16)] flex items-center justify-between gap-4">
+            <div class="px-6 md:px-8 py-4 border-t border-[rgba(184,138,66,0.16)] flex items-center justify-end gap-4">
               <button
                   type="button"
                   class="text-sm font-semibold text-[var(--title)] hover:text-[var(--gold-deep)] transition"
@@ -274,187 +295,10 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
+import { lockBodyScroll, unlockBodyScroll } from '../composables/useBodyScrollLock.js'
+import { objectCatalog } from '../content/objectCatalog'
 
-/**
- * Картинки:
- * - Можно использовать одну image или массив gallery.
- * - cover в карточке берём: gallery[0] или image
- *
- * Добавить фото можно так:
- * import alley1 from '../assets/objects/alley/1.jpg'
- * import alley2 from '../assets/objects/alley/2.jpg'
- * gallery: [alley1, alley2]
- */
-
-import alley1 from '../assets/objects/alley/1.jpeg'
-import alley2 from '../assets/objects/alley/2.jpeg'
-import alley3 from '../assets/objects/alley/3.jpeg'
-import alley4 from '../assets/objects/alley/4.jpeg'
-import alley5 from '../assets/objects/alley/5.jpeg'
-import alley6 from '../assets/objects/alley/6.jpeg'
-import alley7 from '../assets/objects/alley/7.jpeg'
-import alley8 from '../assets/objects/alley/8.jpeg'
-import alley9 from '../assets/objects/alley/9.jpeg'
-
-import hotel1 from '../assets/objects/hotel/1.jpeg'
-import hotel2 from '../assets/objects/hotel/2.jpeg'
-import hotel3 from '../assets/objects/hotel/3.jpeg'
-
-const objects = [
-  {
-    id: 'alley',
-    title: 'Аллея родовых групп Тувы',
-    badge: 'АР',
-    image: null,
-    gallery: [alley1, alley2, alley3, alley4, alley5, alley6, alley7, alley8, alley9],
-    short:
-        'Центральное культурное пространство, объединяющее родовые группы и формирующее символику комплекса.',
-    full:
-        'Аллея родовых групп Тувы — смысловой центр «Өтүкена». Здесь соединяются традиции, идентичность и современная подача: место для церемоний, встреч, фестивальных активностей и культурных инициатив.',
-    tags: ['Культура', 'Идентичность', 'События'],
-    points: [
-      'Культурные и торжественные мероприятия',
-      'Пространство для экспозиций и символики родов',
-      'Точка притяжения для гостей комплекса'
-    ]
-  },
-  {
-    id: 'yurt-town',
-    title: 'Юрточный городок',
-    badge: 'ЮГ',
-    image: null,
-    gallery: [],
-    short:
-        'Этно-проживание и погружение в традиционный быт: гостевые юрты, программы и атмосферные зоны отдыха.',
-    full:
-        'Юрточный городок формирует уникальный опыт пребывания: комфортное этно-проживание, тематические программы, мастер-классы и возможность “жить внутри культуры”.',
-    tags: ['Проживание', 'Туризм', 'Опыт'],
-    points: [
-      'Гостевые форматы проживания',
-      'Этно-программы и мастер-классы',
-      'Семейный отдых и турпоток'
-    ]
-  },
-  {
-    id: 'hippodrome',
-    title: 'Ипподром',
-    badge: 'ИП',
-    image: null,
-    gallery: [],
-    short:
-        'Площадка для конных соревнований и праздников: традиционные виды спорта и зрелищные события.',
-    full:
-        'Ипподром — ключевая спортивно-событийная точка: соревнования, показательные выступления, праздники и активности, которые усиливают привлекательность комплекса для туристов и гостей региона.',
-    tags: ['Спорт', 'События', 'Традиции'],
-    points: [
-      'Конные соревнования и праздники',
-      'Показательные выступления',
-      'Зрелищная программа для гостей'
-    ]
-  },
-  {
-    id: 'restaurant',
-    title: 'Ресторан',
-    badge: 'РС',
-    image: null,
-    gallery: [],
-    short:
-        'Гастрономический центр: кухня региона, сервис для мероприятий и комфортный формат для гостей комплекса.',
-    full:
-        'Ресторан — важная часть гостевого сервиса. Он поддерживает событийную программу, формирует гастрономическую точку притяжения и повышает среднюю продолжительность пребывания гостей.',
-    tags: ['Сервис', 'Гастро', 'Мероприятия'],
-    points: [
-      'Кухня региона и гостевой сервис',
-      'Питание для участников мероприятий',
-      'Повышение комфорта и времени пребывания'
-    ]
-  },
-  {
-    id: 'power-place',
-    title: 'Место силы',
-    badge: 'МС',
-    image: null,
-    gallery: [],
-    short:
-        'Тихая зона смысла и атмосферы: пространство для созерцания, традиций и внутреннего “переключения”.',
-    full:
-        'Место силы — часть культурного ландшафта комплекса. Это пространство тишины, созерцания и уважения к традиции, которое усиливает эмоциональную ценность посещения.',
-    tags: ['Смысл', 'Природа', 'Атмосфера'],
-    points: [
-      'Спокойная зона для прогулок и созерцания',
-      'Усиление атмосферы и “памяти места”',
-      'Точка для фото и личного опыта'
-    ]
-  },
-  {
-    id: 'hotel',
-    title: 'Гостиничный комплекс',
-    badge: 'ГК',
-    image: null,
-    gallery: [hotel1, hotel2, hotel3],
-    short:
-        'Комфортное размещение туристов и участников событий. Основа круглогодичного функционирования комплекса.',
-    full:
-        'Гостиничный комплекс повышает устойчивость проекта: размещение для гостей и участников мероприятий, удобные форматы проживания и возможность продлить пребывание на территории «Өтүкена».',
-    tags: ['Проживание', 'Круглый год', 'Туризм'],
-    points: [
-      'Размещение гостей и участников событий',
-      'Стабильная загрузка при событийной программе',
-      'Круглогодичная модель работы'
-    ]
-  },
-  {
-    id: 'museum',
-    title: 'Музей культуры КМНС',
-    badge: 'МК',
-    image: null,
-    gallery: [],
-    short:
-        'Экспозиционное пространство: культура и наследие коренных малочисленных народов Сибири в современном формате.',
-    full:
-        'Музей культуры КМНС — образовательное и культурное ядро: экспозиции, выставки, лекции и программы, которые делают комплекс содержательным и интересным для разных аудиторий.',
-    tags: ['Музей', 'Образование', 'Наследие'],
-    points: [
-      'Экспозиции и временные выставки',
-      'Образовательные программы',
-      'Культурная коммуникация для гостей'
-    ]
-  },
-  {
-    id: 'aquapark',
-    title: 'Аквапарк',
-    badge: 'АК',
-    image: null,
-    gallery: [],
-    short:
-        'Семейный досуг и развлечения. Объект, усиливающий круглогодичную привлекательность комплекса.',
-    full:
-        'Аквапарк — элемент семейного отдыха и долгого пребывания. Он помогает удерживать поток гостей вне сезонности и дополняет культурную часть комплекса сервисом и развлечениями.',
-    tags: ['Семья', 'Досуг', 'Круглый год'],
-    points: [
-      'Развлекательный формат для семей',
-      'Снижение сезонности',
-      'Рост времени пребывания гостей'
-    ]
-  },
-  {
-    id: 'archery',
-    title: 'Стадион стрельбы из лука',
-    badge: 'ЛУ',
-    image: null,
-    gallery: [],
-    short:
-        'Площадка для тренировок и соревнований. Современный объект под традиционный вид спорта.',
-    full:
-        'Стадион стрельбы из лука поддерживает спортивное направление комплекса: соревнования, турниры, тренировки и демонстрационные программы для гостей.',
-    tags: ['Спорт', 'Соревнования', 'Традиции'],
-    points: [
-      'Соревнования и турниры',
-      'Тренировочная база',
-      'Зрелищные активности для гостей'
-    ]
-  }
-]
+const objects = objectCatalog
 
 const isOpen = ref(false)
 const selected = ref(null)
@@ -471,34 +315,13 @@ const currentImage = computed(() => {
 })
 
 const coverImage = (obj) => (obj.gallery?.length ? obj.gallery[0] : obj.image)
+const coverImageMobile = (obj) => obj.imageMobile || null
 
 // --- modal sizing (scroll inside) ---
 const panelRef = ref(null)
 const panelStyle = computed(() => ({
   maxHeight: 'calc(100dvh - 24px)' // важно для мобильных браузеров
 }))
-
-const lockBodyScroll = () => {
-  // фикс для iOS: сохраняем позицию и фиксируем body
-  const y = window.scrollY || 0
-  document.body.dataset.scrollY = String(y)
-  document.body.style.position = 'fixed'
-  document.body.style.top = `-${y}px`
-  document.body.style.left = '0'
-  document.body.style.right = '0'
-  document.body.style.width = '100%'
-}
-
-const unlockBodyScroll = () => {
-  const y = parseInt(document.body.dataset.scrollY || '0', 10)
-  document.body.style.position = ''
-  document.body.style.top = ''
-  document.body.style.left = ''
-  document.body.style.right = ''
-  document.body.style.width = ''
-  delete document.body.dataset.scrollY
-  window.scrollTo(0, y)
-}
 
 const openModal = async (obj) => {
   selected.value = obj
@@ -573,8 +396,7 @@ onBeforeUnmount(() => {
   background:
     linear-gradient(180deg, rgba(10, 13, 10, 0.62), rgba(10, 13, 10, 0.34)),
     radial-gradient(circle at top left, rgba(184, 138, 66, 0.16), transparent 46%);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
 .object-card-kicker,
