@@ -42,6 +42,33 @@
             «Өтүкен» объединяет этнокультурную среду, инфраструктуру для отдыха и площадки для крупных мероприятий.
           </p>
 
+          <div
+            v-if="featuredEvent"
+            class="hero-event-toast mb-8 max-w-2xl lg:mx-auto"
+          >
+            <div class="hero-event-mark" aria-hidden="true"></div>
+
+            <div class="hero-event-copy">
+              <div class="hero-event-label">
+                Предстоящее событие
+              </div>
+              <div class="hero-event-title">
+                {{ featuredEvent.title }}
+              </div>
+              <div class="hero-event-meta">
+                {{ featuredEvent.dateText }} • Республика Тыва
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="hero-event-button"
+              @click="scrollTo('festival')"
+            >
+              Подробнее
+            </button>
+          </div>
+
           <div class="flex justify-center">
             <button @click="scrollTo('about')" class="theme-button-primary">
               О проекте
@@ -68,9 +95,12 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { eventCatalog } from '../content/events'
 
 import overview from '../assets/optimized/hero/overview.webp'
 import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
+
+const featuredEvent = eventCatalog[0] ?? null
 
 const slides = ref([
   {
@@ -256,6 +286,88 @@ onBeforeUnmount(() => {
   text-shadow: 0 6px 24px rgba(0, 0, 0, 0.44);
 }
 
+.hero-event-toast {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.05rem 1rem 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(135deg, rgba(12, 16, 13, 0.62), rgba(18, 23, 18, 0.38)),
+    radial-gradient(circle at top left, rgba(201, 169, 97, 0.18), transparent 38%);
+  box-shadow:
+    0 24px 44px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.hero-event-mark {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(201, 169, 97, 1) 0%, rgba(201, 169, 97, 0.52) 58%, rgba(201, 169, 97, 0) 100%);
+  box-shadow: 0 0 24px rgba(201, 169, 97, 0.42);
+}
+
+.hero-event-copy {
+  min-width: 0;
+}
+
+.hero-event-label {
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.64);
+  margin-bottom: 0.42rem;
+}
+
+.hero-event-title {
+  font-size: 1rem;
+  line-height: 1.35;
+  font-weight: 600;
+  color: rgba(255, 249, 237, 0.96);
+}
+
+.hero-event-meta {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-event-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.24), rgba(201, 169, 97, 0.12));
+  color: #fff6e3;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.hero-event-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201, 169, 97, 0.46);
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.34), rgba(201, 169, 97, 0.16));
+}
+
+.hero-event-button:focus-visible {
+  outline: 2px solid rgba(201, 169, 97, 0.58);
+  outline-offset: 3px;
+}
+
 @media (min-width: 768px) {
   .hero-panel {
     padding: 2.5rem 2.75rem;
@@ -266,6 +378,25 @@ onBeforeUnmount(() => {
   .hero-panel {
     padding: 1.5rem 1rem;
     border-radius: 1.5rem;
+  }
+
+  .hero-event-toast {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 0.75rem;
+    padding: 0.95rem;
+  }
+
+  .hero-event-mark {
+    display: none;
+  }
+
+  .hero-event-title {
+    font-size: 0.96rem;
+  }
+
+  .hero-event-button {
+    width: 100%;
   }
 }
 </style>
