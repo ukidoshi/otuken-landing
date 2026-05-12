@@ -14,7 +14,7 @@
         ӨТҮКЕН
       </RouterLink>
 
-      <div class="hidden md:flex items-center gap-3">
+      <div class="hidden md:flex items-center gap-2 lg:gap-3">
         <ul class="header-menu list-none items-center">
           <li v-for="item in menuItems" :key="item.label">
             <button
@@ -26,6 +26,23 @@
             </button>
           </li>
         </ul>
+
+        <div
+          class="header-locale flex items-center gap-1 rounded-full border border-[rgba(184,138,66,0.16)] bg-[rgba(255,255,255,0.55)] p-1"
+          role="group"
+          aria-label="Язык сайта"
+        >
+          <button
+            v-for="lang in siteLanguages"
+            :key="lang.code"
+            type="button"
+            class="locale-chip"
+            :class="{ 'locale-chip--active': locale === lang.code }"
+            @click="setLocale(lang.code)"
+          >
+            {{ lang.label }}
+          </button>
+        </div>
 
         <button
           type="button"
@@ -68,6 +85,32 @@
             {{ item.label }}
           </button>
 
+          <div
+            class="mt-3 pt-3 border-t border-[rgba(184,138,66,0.14)]"
+            role="group"
+            aria-label="Язык сайта"
+          >
+            <div class="px-4 pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--clay)]">
+              Язык
+            </div>
+            <div class="flex flex-col gap-1 px-2 pb-2">
+              <button
+                v-for="lang in siteLanguages"
+                :key="`lang-${lang.code}`"
+                type="button"
+                class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold transition"
+                :class="
+                  locale === lang.code
+                    ? 'bg-[rgba(184,138,66,0.16)] text-[var(--title)]'
+                    : 'text-[var(--ink)] hover:bg-[rgba(74,111,97,0.08)]'
+                "
+                @click="setLocale(lang.code)"
+              >
+                {{ lang.label }}
+              </button>
+            </div>
+          </div>
+
           <button
             type="button"
             class="block w-full mt-2 text-left px-4 py-3 rounded-xl bg-[var(--gold)] text-black font-semibold hover:bg-[var(--gold-deep)] transition shadow-[0_18px_30px_rgba(184,138,66,0.18)]"
@@ -85,9 +128,16 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { headerNavigation } from '../seo/site'
+import { useSiteLocale } from '../composables/useSiteLocale'
 
 const router = useRouter()
 const route = useRoute()
+const { locale, languages: siteLanguages, setLocale: persistLocale } = useSiteLocale()
+
+const setLocale = (code) => {
+  persistLocale(code)
+  closeMenu()
+}
 const isMenuOpen = ref(false)
 const isHeaderVisible = ref(route.path !== '/')
 const isHomeRoute = computed(() => route.path === '/')
@@ -309,6 +359,38 @@ onBeforeUnmount(() => {
   background: linear-gradient(135deg, #d1ac58, #bb8b42);
   transform: translateY(-1px);
   box-shadow: 0 20px 34px rgba(184, 138, 66, 0.22);
+}
+
+.locale-chip {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: rgba(28, 42, 35, 0.82);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+@media (min-width: 1024px) {
+  .locale-chip {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.85rem;
+  }
+}
+
+.locale-chip:hover {
+  color: #204538;
+  background: rgba(74, 111, 97, 0.1);
+}
+
+.locale-chip--active {
+  color: #204538;
+  background: rgba(184, 138, 66, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(184, 138, 66, 0.28);
 }
 
 .mobile-menu-enter-active,

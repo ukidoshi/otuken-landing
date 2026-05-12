@@ -28,6 +28,18 @@
     <div class="relative z-10 max-w-7xl mx-auto min-h-[92vh] md:min-h-screen flex flex-col justify-center px-4 md:px-8 py-16 md:py-24">
       <div class="max-w-4xl lg:mx-auto lg:text-center">
         <div class="hero-panel">
+          <div class="hero-logo-wrap mb-6 lg:mx-auto">
+            <img
+              :src="heroLogoSrc"
+              alt="Логотип этнокультурного комплекса «Өтүкен»"
+              width="160"
+              height="160"
+              class="hero-logo"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
+
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/30 bg-black/36 text-xs md:text-sm mb-6 lg:mx-auto">
             <span class="w-2 h-2 rounded-full bg-[#C9A961]"></span>
             Республика Тыва • проект в стадии строительства
@@ -44,7 +56,10 @@
 
           <div
             v-if="featuredEvent"
-            class="hero-event-toast mb-8 max-w-2xl lg:mx-auto"
+            :class="[
+              'hero-event-toast max-w-2xl lg:mx-auto',
+              latestNews?.slug ? 'mb-6' : 'mb-8'
+            ]"
           >
             <div class="hero-event-mark" aria-hidden="true"></div>
 
@@ -64,6 +79,33 @@
               type="button"
               class="hero-event-button"
               @click="scrollTo('festival')"
+            >
+              Подробнее
+            </button>
+          </div>
+
+          <div
+            v-if="latestNews?.slug"
+            class="hero-event-toast mb-8 max-w-2xl lg:mx-auto"
+          >
+            <div class="hero-event-mark" aria-hidden="true"></div>
+
+            <div class="hero-event-copy">
+              <div class="hero-event-label">
+                Актуальная новость
+              </div>
+              <div class="hero-event-title">
+                {{ latestNews.title }}
+              </div>
+              <p v-if="latestNews.excerpt" class="hero-news-preview">
+                {{ latestNews.excerpt }}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="hero-event-button"
+              @click="scrollTo('home-news')"
             >
               Подробнее
             </button>
@@ -96,9 +138,16 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { eventCatalog } from '../content/events'
-
 import overview from '../assets/optimized/hero/overview.webp'
 import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
+import heroLogoSrc from '../assets/brand/bayken-hero-logo.png'
+
+defineProps({
+  latestNews: {
+    type: Object,
+    default: null
+  }
+})
 
 const featuredEvent = eventCatalog[0] ?? null
 
@@ -278,6 +327,27 @@ onBeforeUnmount(() => {
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
 }
 
+.hero-logo-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-logo {
+  width: 7.5rem;
+  height: 7.5rem;
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 10px 28px rgba(201, 169, 97, 0.35));
+}
+
+@media (min-width: 768px) {
+  .hero-logo {
+    width: 10rem;
+    height: 10rem;
+  }
+}
+
 .hero-title {
   text-shadow: 0 14px 42px rgba(0, 0, 0, 0.5);
 }
@@ -336,6 +406,17 @@ onBeforeUnmount(() => {
   font-size: 0.88rem;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-news-preview {
+  margin-top: 0.45rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.78);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .hero-event-button {

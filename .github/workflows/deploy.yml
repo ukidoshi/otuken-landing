@@ -1,13 +1,43 @@
 name: Build and Deploy
 
+# Деплой статической сборки на обычный shared-хостинг (без root) по SSH + rsync.
+#
+# Требуемые секреты репозитория (Settings → Secrets and variables → Actions):
+#   HOSTING_HOST          — адрес SSH (например, server.example.ru)
+#   HOSTING_USERNAME      — SSH-логин аккаунта на хостинге
+#   HOSTING_SSH_KEY       — приватный SSH-ключ (PEM, целиком, с -----BEGIN/-----END)
+#   HOSTING_PORT          — SSH-порт (часто 22; на некоторых хостингах 222/2222 — указать свой)
+#   HOSTING_TARGET_PATH   — абсолютный путь до корня сайта на хостинге
+#                           (например: /home/USER/public_html или /var/www/USER/data/www/site.ru)
+#
+# Опциональные переменные сборки (если задан хотя бы один — попадёт в `import.meta.env`):
+#   VITE_SITE_URL, VITE_API_URL, VITE_API_BASE_URL, VITE_NEWS_PREVIEW_PATH,
+#   VITE_DISTRICT_INTEREST_ENDPOINT, VITE_GA_MEASUREMENT_ID, VITE_YANDEX_METRIKA_ID,
+#   VITE_GOOGLE_SITE_VERIFICATION, VITE_YANDEX_VERIFICATION
+#
+# Примечания по shared-хостингу:
+# * Используется только пользовательский SSH-доступ (никаких sudo / root).
+# * rsync — наиболее частый бинарь на shared (cPanel/ISPmanager/Plesk/Beget/TimeWeb).
+#   Если на сервере rsync отсутствует, см. альтернативный шаг ниже (закомментирован).
+# * В корне dist лежит .htaccess (см. public/.htaccess) — SPA-фолбэк для роутов
+#   вроде /novosti/:slug, которые не предсгенерированы vite-ssg.
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -16,21 +46,72 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
+          node-version: '20'
+          cache: 'npm'
+          # package-lock.json исключён из репозитория (см. .gitignore).
+          # Кэш будет валиден по hash(package.json).
+          cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund --prefer-offline
 
-      - name: Build project
+      - name: Build site (vite-ssg)
+        env:
+          NODE_ENV: production
+          VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_NEWS_PREVIEW_PATH: ${{ secrets.VITE_NEWS_PREVIEW_PATH }}
+          VITE_DISTRICT_INTEREST_ENDPOINT: ${{ secrets.VITE_DISTRICT_INTEREST_ENDPOINT }}
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+          VITE_YANDEX_METRIKA_ID: ${{ secrets.VITE_YANDEX_METRIKA_ID }}
+          VITE_GOOGLE_SITE_VERIFICATION: ${{ secrets.VITE_GOOGLE_SITE_VERIFICATION }}
+          VITE_YANDEX_VERIFICATION: ${{ secrets.VITE_YANDEX_VERIFICATION }}
         run: npm run build
 
-      - name: Deploy to VPS
-        uses: appleboy/scp-action@v0.1.7
+      - name: Sanity check build output
+        run: |
+          test -f dist/index.html || (echo "dist/index.html отсутствует — сборка не удалась" && exit 1)
+          du -sh dist || true
+
+      - name: Deploy via rsync over SSH
+        uses: easingthemes/ssh-deploy@v5.0.3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          source: "dist/*"
-          target: ${{ secrets.VPS_TARGET_PATH }}
-          strip_components: 1
+          SSH_PRIVATE_KEY: ${{ secrets.HOSTING_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOSTING_HOST }}
+          REMOTE_USER: ${{ secrets.HOSTING_USERNAME }}
+          REMOTE_PORT: ${{ secrets.HOSTING_PORT }}
+          SOURCE: 'dist/'
+          TARGET: ${{ secrets.HOSTING_TARGET_PATH }}
+          # -r рекурсия, -l симлинки, -t время, -z сжатие в канале,
+          # -O не выставлять время на каталогах (важно: на shared часто нет прав),
+          # --delete-after удаляем устаревшие файлы только после успешной заливки,
+          # --no-perms / --no-owner / --no-group — не пытаемся менять владельцев и chmod.
+          ARGS: '-rltzvO --delete-after --no-perms --no-owner --no-group --human-readable'
+          # Защищаем то, что не относится к фронту (если в той же директории живёт что-то ещё).
+          EXCLUDE: '/.well-known/, /uploads/, /storage/, /api/, /.htpasswd, /cgi-bin/'
+
+      # ───────────────────────────────────────────────────────────────────────
+      # Альтернатива, если на хостинге НЕТ SSH/rsync, а только FTP/SFTP:
+      # 1) Закомментируйте шаг "Deploy via rsync over SSH" выше.
+      # 2) Добавьте секреты HOSTING_FTP_SERVER / HOSTING_FTP_USER / HOSTING_FTP_PASSWORD.
+      # 3) Раскомментируйте блок ниже.
+      #
+      # - name: Deploy via FTP/FTPS
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      #   with:
+      #     server: ${{ secrets.HOSTING_FTP_SERVER }}
+      #     username: ${{ secrets.HOSTING_FTP_USER }}
+      #     password: ${{ secrets.HOSTING_FTP_PASSWORD }}
+      #     protocol: ftps          # или 'ftp', если хостинг не поддерживает FTPS
+      #     port: 21
+      #     local-dir: ./dist/
+      #     server-dir: /public_html/   # ваш путь на сервере
+      #     dangerous-clean-slate: false
+      #     exclude: |
+      #       **/.git*
+      #       **/.git*/**
+      #       **/node_modules/**
+      #       /uploads/**
+      #       /storage/**
+      # ───────────────────────────────────────────────────────────────────────

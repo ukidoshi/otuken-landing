@@ -15,6 +15,16 @@ export const routes = [
     component: () => import('../pages/NewsPage.vue')
   },
   {
+    path: '/novosti/:slug',
+    name: 'news-detail',
+    component: () => import('../pages/NewsDetailPage.vue')
+  },
+  {
+    path: '/news-preview/:id',
+    name: 'news-preview',
+    component: () => import('../pages/NewsPreviewPage.vue')
+  },
+  {
     path: '/o-komplekse',
     redirect: '/'
   },

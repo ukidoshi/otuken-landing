@@ -1,0 +1,79 @@
+# Otuken landing — Apache .htaccess для shared-хостинга
+# Нужен, чтобы клиентские роуты Vue Router (например, /novosti/<slug>),
+# которые НЕ предсгенерированы vite-ssg, всё равно отдавали index.html.
+
+# ── 1. Базовая безопасность и индексация ──────────────────────────────────────
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# ── 2. SPA-фолбэк ─────────────────────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # (опционально) принудительный HTTPS — раскомментируйте, если SSL уже настроен
+  # RewriteCond %{HTTPS} !=on
+  # RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # Если для запроса есть статический .html файл (vite-ssg pre-render) — отдаём его
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
+  RewriteRule ^(.+?)/?$ /$1.html [L]
+
+  # Не трогаем существующие файлы и директории
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Не трогаем API и статические ассеты, если они проксируются с того же домена
+  RewriteRule ^api/ - [L]
+  RewriteRule ^storage/ - [L]
+  RewriteRule ^assets/ - [L]
+
+  # Всё остальное — на index.html (SPA-фолбэк)
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ── 3. Кэш статических ресурсов ───────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  ExpiresByType text/html                "access plus 0 seconds"
+  ExpiresByType application/json         "access plus 0 seconds"
+  ExpiresByType application/xml          "access plus 1 hour"
+  ExpiresByType image/svg+xml            "access plus 30 days"
+  ExpiresByType image/webp               "access plus 30 days"
+  ExpiresByType image/png                "access plus 30 days"
+  ExpiresByType image/jpeg               "access plus 30 days"
+  ExpiresByType image/x-icon             "access plus 30 days"
+  ExpiresByType font/woff2               "access plus 1 year"
+  ExpiresByType application/font-woff2   "access plus 1 year"
+  ExpiresByType text/css                 "access plus 1 year"
+  ExpiresByType application/javascript   "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Vite кладёт хэш в имя файла → можно агрессивно кэшировать /assets/*
+  <FilesMatch "\.(?:js|css|woff2?|webp|png|jpg|jpeg|gif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML — всегда свежий, иначе пользователи будут получать старые ссылки на ассеты
+  <FilesMatch "\.(?:html)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
+# ── 4. Сжатие на лету ─────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml application/xml
+</IfModule>

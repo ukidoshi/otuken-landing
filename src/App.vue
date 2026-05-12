@@ -1,18 +1,29 @@
 <template>
   <router-view />
+  <LanguagePickerModal />
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useHead } from '@unhead/vue'
 import { analyticsConfig } from './seo/site'
+import LanguagePickerModal from './components/LanguagePickerModal.vue'
+import { htmlLangForLocale, initSiteLocaleFromClient, siteLocale } from './composables/useSiteLocale'
+
+onMounted(() => {
+  initSiteLocaleFromClient()
+})
 
 const gaId = analyticsConfig.gaMeasurementId
 const ymId = analyticsConfig.yandexMetrikaId
 
-useHead({
+useHead(() => ({
   htmlAttrs: {
-    lang: 'ru'
-  },
+    lang: htmlLangForLocale(siteLocale.value)
+  }
+}))
+
+useHead({
   meta: [
     { name: 'theme-color', content: '#f7f0e3' },
     { name: 'format-detection', content: 'telephone=no' },

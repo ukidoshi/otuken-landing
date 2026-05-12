@@ -40,7 +40,7 @@
               <img
                 :src="image"
                 :alt="imageAlt || title"
-                class="w-full h-full object-cover"
+                class="page-hero-media-img"
                 loading="eager"
                 decoding="async"
                 fetchpriority="high"
@@ -98,23 +98,27 @@ defineProps({
 
 <style scoped>
 .page-hero-media {
-  min-height: 20rem;
+  align-self: start;
   overflow: hidden;
   border-radius: 1.8rem;
   border: 1px solid rgba(184, 138, 66, 0.18);
   box-shadow: 0 18px 36px rgba(55, 40, 18, 0.1);
 }
 
-.page-hero-media img {
+.page-hero-media picture {
+  display: block;
+  line-height: 0;
+}
+
+.page-hero-media-img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 @media (max-width: 1023px) {
   .page-hero-media {
     margin-top: 1rem;
-    min-height: 16rem;
   }
 }
 </style>
