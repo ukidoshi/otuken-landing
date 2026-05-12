@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /404
 
-Host: otuken.ru
-Sitemap: https://otuken.ru/sitemap.xml
+Host: отукен.рф
+Sitemap: https://отукен.рф/sitemap.xml

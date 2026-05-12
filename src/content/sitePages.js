@@ -1,4 +1,17 @@
-export const homeSeoContent = {
+import { reactive } from 'vue'
+
+/**
+ * Тексты страниц лендинга.
+ *
+ * Управляется через админку **только главная страница** (`homeSeoContent`).
+ * Если включён API `GET /api/v1/site-content?locale=...`, переводы для
+ * `home` накладываются поверх дефолтов (см. `applySitePagesOverrides`).
+ *
+ * Остальные страницы (`complex`, `location`, `contacts`, `objects_page`,
+ * `events_page`) живут как статические константы и редактируются прямо в коде.
+ */
+
+const DEFAULT_HOME = {
   title: 'Отукен (Өтүкен) — этнокультурный комплекс в Республике Тыва',
   description:
     '«Отукен» / «Өтүкен» — этнокультурный комплекс рядом с Кызылом и Каа-Хемом. На территории проекта запланированы Аллея родовых групп Тувы, юрточный городок, гостиничный комплекс, ипподром, музей, аквапарк и площадки для событий.',
@@ -20,7 +33,8 @@ export const homeSeoContent = {
     },
     {
       title: 'Объекты комплекса',
-      description: 'Каталог ключевых объектов: от Аллеи родовых групп Тувы до юрточного городка и ипподрома.',
+      description:
+        'Каталог ключевых объектов: от Аллеи родовых групп Тувы до юрточного городка и ипподрома.',
       to: '/obekty'
     },
     {
@@ -68,7 +82,7 @@ export const homeSeoContent = {
   ]
 }
 
-export const complexPageContent = {
+const DEFAULT_COMPLEX = {
   badge: 'О комплексе',
   h1: 'Этнокультурный комплекс «Отукен» в Республике Тыва',
   intro:
@@ -96,15 +110,18 @@ export const complexPageContent = {
       cards: [
         {
           title: 'Культурный контур',
-          text: 'Аллея родовых групп Тувы, музей культуры КМНС, место силы и событийные пространства формируют смысловое ядро проекта.'
+          text:
+            'Аллея родовых групп Тувы, музей культуры КМНС, место силы и событийные пространства формируют смысловое ядро проекта.'
         },
         {
           title: 'Гостевой контур',
-          text: 'Юрточный городок, гостиничный комплекс, ресторан и семейные зоны делают территорию пригодной для более долгого пребывания.'
+          text:
+            'Юрточный городок, гостиничный комплекс, ресторан и семейные зоны делают территорию пригодной для более долгого пребывания.'
         },
         {
           title: 'Событийный контур',
-          text: 'Ипподром, площадки для фестивалей и зоны массовых мероприятий создают устойчивую программу привлечения аудитории.'
+          text:
+            'Ипподром, площадки для фестивалей и зоны массовых мероприятий создают устойчивую программу привлечения аудитории.'
         }
       ]
     },
@@ -159,7 +176,7 @@ export const complexPageContent = {
   }
 }
 
-export const locationPageContent = {
+const DEFAULT_LOCATION = {
   badge: 'Локация и доступность',
   h1: 'Где находится «Отукен»: Кызыл, Каа-Хем и Республика Тыва',
   intro:
@@ -185,7 +202,8 @@ export const locationPageContent = {
         },
         {
           title: 'Ближайшая городская точка',
-          text: 'Кызыл — главный ориентир для пользователей, ищущих проект через региональный центр.'
+          text:
+            'Кызыл — главный ориентир для пользователей, ищущих проект через региональный центр.'
         },
         {
           title: 'Ближайшая локальная точка',
@@ -244,7 +262,7 @@ export const locationPageContent = {
   }
 }
 
-export const contactsPageContent = {
+const DEFAULT_CONTACTS = {
   title: 'Контакты этнокультурного комплекса «Отукен»',
   description:
     'Контакты проекта «Отукен» / «Өтүкен»: телефон, e-mail, локальная привязка к Республике Тыва, Кызылу и Каа-Хему, а также информация для туристов, партнёров и инвесторов.',
@@ -295,7 +313,7 @@ export const contactsPageContent = {
   }
 }
 
-export const objectsPageContent = {
+const DEFAULT_OBJECTS_PAGE = {
   sections: [
     {
       title: 'Из чего состоит «Отукен»',
@@ -312,15 +330,18 @@ export const objectsPageContent = {
       cards: [
         {
           title: 'Культурный слой',
-          text: 'Аллея родовых групп Тувы, музей культуры КМНС и место силы формируют идентичность проекта.'
+          text:
+            'Аллея родовых групп Тувы, музей культуры КМНС и место силы формируют идентичность проекта.'
         },
         {
           title: 'Гостевой слой',
-          text: 'Юрточный городок, гостиница и ресторан поддерживают туристическую и сервисную инфраструктуру.'
+          text:
+            'Юрточный городок, гостиница и ресторан поддерживают туристическую и сервисную инфраструктуру.'
         },
         {
           title: 'Событийный слой',
-          text: 'Ипподром, стадион стрельбы из лука и общественные пространства работают на событийный поток.'
+          text:
+            'Ипподром, стадион стрельбы из лука и общественные пространства работают на событийный поток.'
         }
       ]
     },
@@ -363,7 +384,7 @@ export const objectsPageContent = {
   }
 }
 
-export const eventsPageContent = {
+const DEFAULT_EVENTS_PAGE = {
   sections: [
     {
       title: 'Зачем «Отукену» событийная программа',
@@ -409,4 +430,60 @@ export const eventsPageContent = {
     primary: { label: 'Объекты комплекса', to: '/obekty' },
     secondary: { label: 'О комплексе', to: '/o-komplekse' }
   }
+}
+
+const clone = (value) =>
+  typeof structuredClone === 'function'
+    ? structuredClone(value)
+    : JSON.parse(JSON.stringify(value))
+
+const overlayInto = (target, source) => {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return
+  for (const key of Object.keys(source)) {
+    const next = source[key]
+    if (next === undefined) continue
+    if (Array.isArray(next)) {
+      target[key] = clone(next)
+      continue
+    }
+    if (next && typeof next === 'object') {
+      if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
+        target[key] = {}
+      }
+      overlayInto(target[key], next)
+      continue
+    }
+    target[key] = next
+  }
+}
+
+const replaceContents = (target, defaults) => {
+  for (const key of Object.keys(target)) delete target[key]
+  Object.assign(target, clone(defaults))
+}
+
+/** Главная страница — единственный раздел, управляемый через админку. */
+export const homeSeoContent = reactive(clone(DEFAULT_HOME))
+
+/** Остальные страницы — статика, редактируется в коде. */
+export const complexPageContent = clone(DEFAULT_COMPLEX)
+export const locationPageContent = clone(DEFAULT_LOCATION)
+export const contactsPageContent = clone(DEFAULT_CONTACTS)
+export const objectsPageContent = clone(DEFAULT_OBJECTS_PAGE)
+export const eventsPageContent = clone(DEFAULT_EVENTS_PAGE)
+
+/** Сбросить тексты главной к исходным дефолтам (перед наложением новой локали). */
+export const resetSitePagesToDefaults = () => {
+  replaceContents(homeSeoContent, DEFAULT_HOME)
+}
+
+/**
+ * Наложить данные из API (под одну выбранную локаль) поверх дефолтов.
+ * Поддерживаемый ключ: `home`. Любые другие ключи (`complex`, `location`,
+ * `contacts`, `objects_page`, `events_page`) игнорируются — эти страницы
+ * редактируются в коде.
+ */
+export const applySitePagesOverrides = (data) => {
+  if (!data || typeof data !== 'object') return
+  if (data.home) overlayInto(homeSeoContent, data.home)
 }

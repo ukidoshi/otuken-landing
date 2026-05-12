@@ -1,3 +1,4 @@
+import { reactive } from 'vue'
 import overview from '../assets/optimized/hero/overview.webp'
 import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
 import hero4 from '../assets/optimized/hero/4.webp'
@@ -36,7 +37,7 @@ const makeFaq = (title, specifics) => [
   }
 ]
 
-export const objectCatalog = [
+const DEFAULT_OBJECT_CATALOG = [
   {
     id: 'alley',
     slug: 'alleya-rodovyh-grupp-tuvy',
@@ -51,7 +52,7 @@ export const objectCatalog = [
     short:
       'Центральное культурное пространство, объединяющее родовые группы и формирующее символику комплекса.',
     full:
-      'Аллея родовых групп Тувы — смысловой центр «Отукена». Здесь соединяются традиции, идентичность и современная подача: место для церемоний, встреч, фестивальных активностей и культурных инициатив.',
+      'Аллея родовых групп Тувы — смысловой центр «Өтүкена». Здесь соединяются традиции, идентичность и современная подача, а сама территория становится продолжением вековой истории народа. На аллее представлены родоплеменные группы Тувы: каждый род — это своя история, своя земля, свои легенды. Это место, где посетители смогут найти свои корни, а молодое поколение — узнать историю предков. Аллея станет пространством для родовых церемоний, фестивальных активностей, культурных инициатив и возвращения к своим истокам и традициям.',
     tags: ['Культура', 'Идентичность', 'События'],
     points: [
       'Культурные и торжественные мероприятия',
@@ -112,7 +113,7 @@ export const objectCatalog = [
     short:
       'Этно-проживание и погружение в традиционный быт: гостевые юрты, программы и атмосферные зоны отдыха.',
     full:
-      'Юрточный городок формирует уникальный опыт пребывания: комфортное этно-проживание, тематические программы, мастер-классы и возможность жить внутри культурного сценария, а не рядом с ним.',
+      'Юрточный городок формирует уникальный опыт пребывания: комфортное этно-проживание в традиционных юртах с дегустацией национальных блюд, тематические программы, мастер-классы и погружение в быт тувинцев. Это не гостиница с этно-декором — это живая среда, где каждый день становится частью вашего личного путешествия в тувинский колорит. Здесь вы не просто смотрите на культуру — вы живёте внутри неё.',
     tags: ['Проживание', 'Туризм', 'Опыт'],
     points: [
       'Гостевые форматы проживания',
@@ -173,7 +174,7 @@ export const objectCatalog = [
     short:
       'Площадка для конных соревнований и праздников: традиционные виды спорта и зрелищные события.',
     full:
-      'Ипподром — ключевая спортивно-событийная точка комплекса: соревнования, показательные выступления, праздники и активности, которые усиливают привлекательность «Отукена» для туристов и гостей региона.',
+      'Ипподром — это сердце конных традиций Тувы, ключевая спортивно-событийная точка комплекса: конные соревнования, показательные выступления, национальные игры, праздники и активности. Место, где зрелище, азарт и традиции встречаются вместе.',
     tags: ['Спорт', 'События', 'Традиции'],
     points: [
       'Конные соревнования и праздники',
@@ -353,7 +354,7 @@ export const objectCatalog = [
     short:
       'Комфортное размещение туристов и участников событий. Основа круглогодичного функционирования комплекса.',
     full:
-      'Гостиничный комплекс повышает устойчивость проекта: размещение для гостей и участников мероприятий, удобные форматы проживания и возможность продлить пребывание на территории «Отукена».',
+      'Гостиничный комплекс — не просто место ночлега. Это уютные номера в современном этно-стиле, продуманный сервис, близость ко всем событиям комплекса и возможность отдохнуть на свежем воздухе. Здесь гость возвращается после насыщенного дня в атмосферу спокойствия и комфорта, а утром снова оказывается в шаге от культурных пространств, ипподрома и природы вокруг «Өтүкена».',
     tags: ['Проживание', 'Круглый год', 'Туризм'],
     points: [
       'Размещение гостей и участников событий',
@@ -413,7 +414,7 @@ export const objectCatalog = [
     short:
       'Экспозиционное пространство: культура и наследие коренных малочисленных народов Сибири в современном формате.',
     full:
-      'Музей культуры КМНС — образовательное и культурное ядро: экспозиции, выставки, лекции и программы, которые делают комплекс содержательным и интересным для разных аудиторий.',
+      'Музей культуры КМНС — это образовательное и культурное ядро «Өтүкена», где можно увидеть самобытные, уникальные традиции коренных малочисленных народов Тувы, веками живущих в гармонии с природой. Экспозиции музея рассказывают о сезонных кочёвках с оленьими стадами, охоте на пушного зверя, берестяных чумах, одежде из оленьих шкур, древних верованиях и шаманских обрядах, особом горловом пении и фольклоре, не похожих на культуру равнинных тувинцев. Посетители увидят подлинные предметы быта, орудия труда, охотничье снаряжение, традиционную одежду и украшения. В музее проводятся лекции, интерактивные программы и встречи с носителями культуры.',
     tags: ['Музей', 'Образование', 'Наследие'],
     points: [
       'Экспозиции и временные выставки',
@@ -473,7 +474,7 @@ export const objectCatalog = [
     short:
       'Семейный досуг и развлечения. Объект, усиливающий круглогодичную привлекательность комплекса.',
     full:
-      'Аквапарк — элемент семейного отдыха и долгого пребывания. Он помогает удерживать поток гостей вне сезонности и дополняет культурную часть комплекса сервисом и развлечениями.',
+      'Аквапарк — отдых для всей семьи в любое время года. Горки, бассейны, детские зоны и релакс. Культурные впечатления плюс водные развлечения — идеальный баланс для отдыха.',
     tags: ['Семья', 'Досуг', 'Круглый год'],
     points: [
       'Развлекательный формат для семей',
@@ -533,7 +534,7 @@ export const objectCatalog = [
     short:
       'Площадка для тренировок и соревнований. Современный объект под традиционный вид спорта.',
     full:
-      'Стадион стрельбы из лука поддерживает спортивное направление комплекса: соревнования, турниры, тренировки и демонстрационные программы для гостей.',
+      'Стадион стрельбы из лука — место, где оживает воинская традиция кочевников. Здесь проводятся турниры и соревнования, тренируются спортсмены, а гости комплекса могут не только посмотреть на мастерство лучников, но и сами взять в руки лук.',
     tags: ['Спорт', 'Соревнования', 'Традиции'],
     points: [
       'Соревнования и турниры',
@@ -581,7 +582,57 @@ export const objectCatalog = [
   }
 ]
 
-export const objectMap = Object.fromEntries(objectCatalog.map((item) => [item.slug, item]))
+const clone = (value) =>
+  typeof structuredClone === 'function'
+    ? structuredClone(value)
+    : JSON.parse(JSON.stringify(value))
+
+const overlayInto = (target, source) => {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return
+  for (const key of Object.keys(source)) {
+    const next = source[key]
+    if (next === undefined) continue
+    if (Array.isArray(next)) {
+      target[key] = clone(next)
+      continue
+    }
+    if (next && typeof next === 'object') {
+      if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
+        target[key] = {}
+      }
+      overlayInto(target[key], next)
+      continue
+    }
+    target[key] = next
+  }
+}
+
+/**
+ * Каталог объектов лендинга. Reactive — потому что админ может прислать
+ * локализованные тексты + загруженные фотографии через `applyObjectCatalogOverrides`.
+ *
+ * Slug и id фиксированы в коде. Из админки меняются:
+ *   - тексты: title, short, full, eyebrow, tags, points, sections, faq,
+ *     seoTitle, metaDescription, intro;
+ *   - фотографии: поле `images` — массив `{ url, alt? }` (или просто строки).
+ *     Если массив непустой — он целиком заменяет `image`, `imageMobile`,
+ *     `gallery`, `galleryMobile`. Если пустой/отсутствует — остаются bundled
+ *     фотографии из кода.
+ *
+ * При несоответствии slug — запись пропускается.
+ */
+export const objectCatalog = reactive(clone(DEFAULT_OBJECT_CATALOG))
+
+export const objectMap = reactive({})
+
+const rebuildObjectMap = () => {
+  for (const key of Object.keys(objectMap)) delete objectMap[key]
+  for (const item of objectCatalog) {
+    if (item?.slug) objectMap[item.slug] = item
+  }
+}
+
+rebuildObjectMap()
 
 export const getObjectBySlug = (slug) => objectMap[slug] || null
 
@@ -594,3 +645,66 @@ export const getObjectLinkItems = (excludeSlug) =>
       description: item.short,
       to: `/obekty/${item.slug}`
     }))
+
+export const resetObjectCatalogToDefaults = () => {
+  objectCatalog.splice(0, objectCatalog.length, ...clone(DEFAULT_OBJECT_CATALOG))
+  rebuildObjectMap()
+}
+
+const normalizeImageEntry = (entry) => {
+  if (typeof entry === 'string') {
+    const url = entry.trim()
+    return url ? { url, alt: '' } : null
+  }
+  if (entry && typeof entry === 'object') {
+    const url = typeof entry.url === 'string' ? entry.url.trim() : ''
+    if (!url) return null
+    const alt = typeof entry.alt === 'string' ? entry.alt : ''
+    return { url, alt }
+  }
+  return null
+}
+
+const applyImagesToObject = (target, images) => {
+  if (!Array.isArray(images)) return
+  const normalized = images.map(normalizeImageEntry).filter(Boolean)
+  if (!normalized.length) return
+
+  const urls = normalized.map((entry) => entry.url)
+  const cover = normalized[0]
+
+  target.image = cover.url
+  target.imageMobile = cover.url
+  target.imageAlt = cover.alt || target.title || ''
+  target.gallery = urls.slice()
+  target.galleryMobile = urls.slice()
+  target.images = normalized
+}
+
+/**
+ * Наложить тексты + фотографии по slug. `rows` — массив объектов вида:
+ *   {
+ *     slug,
+ *     title?, short?, full?, eyebrow?, tags?, points?, sections?, faq?,
+ *     seoTitle?, metaDescription?, intro?,
+ *     images?: Array<string | { url: string, alt?: string }>  // в нужном порядке
+ *   }
+ *
+ * Записи без совпадения по slug пропускаются (slug фиксирован в коде фронта).
+ * Поле `images`, если пришло непустым, целиком заменяет hero/галерею;
+ * иначе остаются bundled-фото из кода.
+ */
+export const applyObjectCatalogOverrides = (rows) => {
+  if (!Array.isArray(rows)) return
+  const bySlug = new Map(objectCatalog.map((item, idx) => [item.slug, idx]))
+  for (const row of rows) {
+    if (!row || typeof row !== 'object' || typeof row.slug !== 'string') continue
+    const idx = bySlug.get(row.slug)
+    if (idx == null) continue
+
+    const { images, ...textFields } = row
+    overlayInto(objectCatalog[idx], textFields)
+    applyImagesToObject(objectCatalog[idx], images)
+  }
+  rebuildObjectMap()
+}

@@ -9,9 +9,13 @@ import { useHead } from '@unhead/vue'
 import { analyticsConfig } from './seo/site'
 import LanguagePickerModal from './components/LanguagePickerModal.vue'
 import { htmlLangForLocale, initSiteLocaleFromClient, siteLocale } from './composables/useSiteLocale'
+import { useSiteContent } from './composables/useSiteContent'
+
+const siteContent = useSiteContent()
 
 onMounted(() => {
   initSiteLocaleFromClient()
+  siteContent.initOnce()
 })
 
 const gaId = analyticsConfig.gaMeasurementId

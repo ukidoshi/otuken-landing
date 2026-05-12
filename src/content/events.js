@@ -1,5 +1,9 @@
 import alley1 from '../assets/optimized/objects/alley/1.webp'
 
+/**
+ * Каталог событий лендинга. Тексты и slug фиксированы в коде —
+ * через админку этот раздел не управляется (см. `useSiteContent`).
+ */
 export const eventCatalog = [
   {
     slug: 'moy-rod-moya-gordost',
@@ -61,4 +65,6 @@ export const eventCatalog = [
   }
 ]
 
-export const eventMap = Object.fromEntries(eventCatalog.map((event) => [event.slug, event]))
+export const eventMap = Object.fromEntries(
+  eventCatalog.map((item) => [item.slug, item])
+)

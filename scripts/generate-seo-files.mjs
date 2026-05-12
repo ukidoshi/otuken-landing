@@ -11,7 +11,7 @@ const publicDir = path.join(rootDir, 'public')
 const ogDir = path.join(publicDir, 'og')
 
 const env = loadEnv('production', rootDir, '')
-const siteUrl = (env.VITE_SITE_URL || 'https://otuken.ru').replace(/\/$/, '')
+const siteUrl = (env.VITE_SITE_URL || 'https://отукен.рф').replace(/\/$/, '')
 const host = new URL(siteUrl).host
 const now = new Date()
 const lastmod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`

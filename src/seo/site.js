@@ -8,7 +8,7 @@ export const siteConfig = {
   defaultTitle: 'Отукен (Өтүкен) — этнокультурный комплекс в Республике Тыва',
   defaultDescription:
     '«Отукен» / «Өтүкен» — этнокультурный комплекс в Республике Тыва, Кызыл. Проект объединяет культуру Тувы, туристическую инфраструктуру, юрточный городок, события и семейный отдых.',
-  siteUrl: (import.meta.env.VITE_SITE_URL || 'https://otuken.ru').replace(/\/$/, ''),
+  siteUrl: (import.meta.env.VITE_SITE_URL || 'https://отукен.рф').replace(/\/$/, ''),
   defaultOgImage: '/og/otuken-og.jpg',
   locale: 'ru_RU',
   phone: '+7 (913) 343-70-76',
