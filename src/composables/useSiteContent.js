@@ -9,25 +9,66 @@ import {
   applyObjectCatalogOverrides,
   resetObjectCatalogToDefaults
 } from '../content/objectCatalog'
+import {
+  applyEventCatalogOverrides,
+  resetEventCatalogToDefaults
+} from '../content/events'
+import {
+  applyAboutSectionOverrides,
+  applyFestivalSectionOverrides,
+  applyObjectsSectionOverrides,
+  applyScenariosOverrides,
+  applyScenariosSectionOverrides,
+  resetHomeContentToDefaults
+} from '../content/homeContent'
 
 let initialized = false
 
 const applyAll = (payload) => {
   resetSitePagesToDefaults()
   resetObjectCatalogToDefaults()
+  resetEventCatalogToDefaults()
+  resetHomeContentToDefaults()
 
   if (!payload || typeof payload !== 'object') return
 
+  // Тексты страниц лендинга (home + complex/location/contacts/objects_page/events_page).
   if (payload.site_pages) applySitePagesOverrides(payload.site_pages)
+
+  // Тексты + фотографии секций главной страницы.
+  if (payload.home) {
+    const { about, festival, scenarios_section, objects_section } = payload.home
+    if (about) applyAboutSectionOverrides(about)
+    if (festival) applyFestivalSectionOverrides(festival)
+    if (scenarios_section) applyScenariosSectionOverrides(scenarios_section)
+    if (objects_section) applyObjectsSectionOverrides(objects_section)
+  }
+
+  // Карточки объектов комплекса + детальная страница /obekty/:slug.
   if (Array.isArray(payload.objects)) applyObjectCatalogOverrides(payload.objects)
+
+  // Карточки сценариев на главной («Как раскрывается территория»).
+  if (Array.isArray(payload.scenarios)) applyScenariosOverrides(payload.scenarios)
+
+  // События проекта + детальная страница /sobytiya/:slug.
+  if (Array.isArray(payload.events)) applyEventCatalogOverrides(payload.events)
 }
 
 /**
- * Подключаемся один раз из App.vue (на клиенте, после монтирования).
+ * Один раз подключается из App.vue (на клиенте, после монтирования).
  *
- * Из админки управляемы:
- *   - Тексты главной страницы лендинга (`site_pages.home`).
- *   - Объекты комплекса (тексты + загруженные фотографии).
+ * Управляемый из админки контент:
+ *   - Тексты всех страниц лендинга (`site_pages.home|complex|location|
+ *     contacts|objects_page|events_page`).
+ *   - Главная страница: блоки «Что такое Өтүкен» (`home.about`),
+ *     «Фестиваль» с модалкой «Подробнее» и галереей (`home.festival`),
+ *     заголовки секций «Ключевые объекты» (`home.objects_section`) и
+ *     «Как раскрывается территория» (`home.scenarios_section`).
+ *   - Каталог объектов комплекса с фотогалереями (`objects[]`).
+ *   - Сценарии территории с фотогалереями (`scenarios[]`).
+ *   - События проекта с фотогалереями (`events[]`).
+ *
+ * Карта `MapSection` редактируется в коде (по дизайну этой итерации).
  *
  * Тихо «деградирует» к статичным дефолтам, если API недоступен.
  */

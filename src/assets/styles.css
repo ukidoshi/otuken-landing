@@ -64,12 +64,25 @@ body {
     font-weight: 600;
 }
 
+@keyframes section-dot-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 5px rgba(184, 138, 66, 0.12);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(184, 138, 66, 0.08);
+        transform: scale(1.06);
+    }
+}
+
 .section-dot {
     width: 0.48rem;
     height: 0.48rem;
     border-radius: 999px;
     background: var(--gold);
     box-shadow: 0 0 0 5px rgba(184, 138, 66, 0.12);
+    animation: section-dot-pulse 3.2s ease-in-out infinite;
 }
 
 .section-title {
@@ -99,7 +112,7 @@ body {
 }
 
 .theme-card-hover {
-    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1), border-color 280ms ease;
 }
 
 .theme-card-hover:hover {
@@ -208,5 +221,53 @@ body {
     .section-lead {
         font-size: 1rem;
         line-height: 1.75;
+    }
+}
+
+/* ─── Motion: scroll reveal (RevealOnScroll.vue) ───
+   Важно: никакого transform на этом контейнере — иначе position:fixed у модалок
+   внутри секции (CulturalObjectsSection, GallerySection, FestivalSection)
+   позиционируется относительно обёртки, а не вьюпорта. Анимируем только opacity. */
+.reveal-on-scroll {
+    --reveal-delay: 0ms;
+    opacity: 0;
+    transition: opacity 0.78s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay);
+    will-change: opacity;
+}
+
+.reveal-on-scroll.reveal-on-scroll--visible {
+    opacity: 1;
+}
+
+/* ─── Motion: переход между страницами (App.vue) ─── */
+.page-fade-enter-active,
+.page-fade-leave-active {
+    transition: opacity 0.32s ease;
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal-on-scroll {
+        opacity: 1;
+        transition: none;
+        will-change: auto;
+    }
+
+    .page-fade-enter-active,
+    .page-fade-leave-active {
+        transition: none;
+    }
+
+    .section-dot {
+        animation: none;
     }
 }

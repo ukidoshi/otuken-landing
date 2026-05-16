@@ -1,10 +1,7 @@
+import { reactive } from 'vue'
 import alley1 from '../assets/optimized/objects/alley/1.webp'
 
-/**
- * Каталог событий лендинга. Тексты и slug фиксированы в коде —
- * через админку этот раздел не управляется (см. `useSiteContent`).
- */
-export const eventCatalog = [
+const DEFAULT_EVENT_CATALOG = [
   {
     slug: 'moy-rod-moya-gordost',
     title: 'Фестиваль «Мой род – моя гордость»',
@@ -14,6 +11,9 @@ export const eventCatalog = [
     metaDescription:
       'Фестиваль «Мой род – моя гордость» — событийный проект этнокультурного комплекса «Отукен» в Республике Тыва. Узнайте о программе, смысле события и роли фестиваля в развитии комплекса.',
     image: alley1,
+    imageMobile: alley1,
+    gallery: [alley1],
+    galleryMobile: [alley1],
     dateText: '21–28 июня',
     startDate: '2026-06-21',
     endDate: '2026-06-28',
@@ -65,6 +65,111 @@ export const eventCatalog = [
   }
 ]
 
-export const eventMap = Object.fromEntries(
-  eventCatalog.map((item) => [item.slug, item])
-)
+const clone = (value) =>
+  typeof structuredClone === 'function'
+    ? structuredClone(value)
+    : JSON.parse(JSON.stringify(value))
+
+const overlayInto = (target, source) => {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return
+  for (const key of Object.keys(source)) {
+    const next = source[key]
+    if (next === undefined) continue
+    if (Array.isArray(next)) {
+      target[key] = clone(next)
+      continue
+    }
+    if (next && typeof next === 'object') {
+      if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
+        target[key] = {}
+      }
+      overlayInto(target[key], next)
+      continue
+    }
+    target[key] = next
+  }
+}
+
+const normalizeImageEntry = (entry) => {
+  if (typeof entry === 'string') {
+    const url = entry.trim()
+    return url ? { url, alt: '' } : null
+  }
+  if (entry && typeof entry === 'object') {
+    const url = typeof entry.url === 'string' ? entry.url.trim() : ''
+    if (!url) return null
+    const alt = typeof entry.alt === 'string' ? entry.alt : ''
+    return { url, alt }
+  }
+  return null
+}
+
+const applyImagesToEvent = (target, images) => {
+  if (!Array.isArray(images)) return
+  const normalized = images.map(normalizeImageEntry).filter(Boolean)
+  if (!normalized.length) return
+
+  const urls = normalized.map((entry) => entry.url)
+  target.image = urls[0]
+  target.imageMobile = urls[0]
+  target.gallery = urls.slice()
+  target.galleryMobile = urls.slice()
+  target.images = normalized
+}
+
+/**
+ * Каталог событий. Reactive: тексты + фотографии могут меняться через
+ * `applyEventCatalogOverrides` под текущую локаль.
+ *
+ * Slug фиксирован в коде; из админки меняются:
+ *   - тексты: title, short, intro, location, dateText, startDate, endDate,
+ *     seoTitle, metaDescription, sections, faq;
+ *   - фотографии: поле `images` — массив `{ url, alt? }`. Непустой массив
+ *     полностью заменяет `image`/`imageMobile`/`gallery`/`galleryMobile`.
+ */
+export const eventCatalog = reactive(clone(DEFAULT_EVENT_CATALOG))
+
+export const eventMap = reactive({})
+
+const rebuildEventMap = () => {
+  for (const key of Object.keys(eventMap)) delete eventMap[key]
+  for (const item of eventCatalog) {
+    if (item?.slug) eventMap[item.slug] = item
+  }
+}
+
+rebuildEventMap()
+
+export const resetEventCatalogToDefaults = () => {
+  eventCatalog.splice(0, eventCatalog.length, ...clone(DEFAULT_EVENT_CATALOG))
+  rebuildEventMap()
+}
+
+/**
+ * Накладывает тексты + фотографии событий по slug.
+ *
+ * `rows[i]` — объект вида:
+ *   {
+ *     slug,
+ *     title?, short?, intro?, location?, dateText?, startDate?, endDate?,
+ *     sections?, faq?, seoTitle?, metaDescription?,
+ *     images?: Array<string | { url, alt? }>
+ *   }
+ *
+ * Записи без совпадения по slug пропускаются (slug фиксирован в коде).
+ * Если `images` непустой — заменяет hero/галерею; иначе остаются bundled-фото.
+ */
+export const applyEventCatalogOverrides = (rows) => {
+  if (!Array.isArray(rows)) return
+  const bySlug = new Map(eventCatalog.map((item, idx) => [item.slug, idx]))
+  for (const row of rows) {
+    if (!row || typeof row !== 'object' || typeof row.slug !== 'string') continue
+    const idx = bySlug.get(row.slug)
+    if (idx == null) continue
+
+    const { images, ...textFields } = row
+    overlayInto(eventCatalog[idx], textFields)
+    applyImagesToEvent(eventCatalog[idx], images)
+  }
+  rebuildEventMap()
+}

@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /404
 
-Host: отукен.рф
+Host: xn--e1ajkbug.xn--p1ai
 Sitemap: https://отукен.рф/sitemap.xml

@@ -1,14 +1,19 @@
 /**
  * Клиент для эндпоинта `GET /api/v1/site-content?locale=...`.
  *
- * Возвращает локализованный контент лендинга, который накладывается поверх
- * дефолтов из `src/content/*`:
- *   - `site_pages.home` → тексты главной страницы (`applySitePagesOverrides`);
- *   - `objects[]` → тексты и загруженные фотографии объектов комплекса
- *     (`applyObjectCatalogOverrides`).
+ * Возвращает локализованный контент всего лендинга «Өтүкен», который
+ * накладывается поверх дефолтов из `src/content/*`:
  *
- * Если API недоступен или вернул некорректный ответ — функция возвращает `null`,
- * и фронт спокойно работает на bundled-дефолтах.
+ *   - `site_pages` — тексты страниц проекта:
+ *       `home`, `complex`, `location`, `contacts`, `objects_page`, `events_page`;
+ *   - `home` — секции главной страницы:
+ *       `about`, `festival` (+ фотографии), `objects_section`, `scenarios_section`;
+ *   - `objects[]` — каталог объектов комплекса (тексты + фотографии);
+ *   - `scenarios[]` — карточки сценариев территории на главной (тексты + фотографии);
+ *   - `events[]` — события проекта (тексты + фотографии).
+ *
+ * Если API недоступен или ответ некорректный — функция возвращает `null`,
+ * и лендинг работает на bundled-дефолтах.
  */
 
 import { getApiBaseUrl } from './newsApi'
@@ -22,7 +27,25 @@ const normalizeLocale = (locale) =>
 /**
  * Запрос за локализованным контентом лендинга.
  * @param {string} locale 'ru' | 'tuv' | 'en'
- * @returns {Promise<{site_pages?: { home?: object }, objects?: Array<object>} | null>}
+ * @returns {Promise<{
+ *   site_pages?: {
+ *     home?: object,
+ *     complex?: object,
+ *     location?: object,
+ *     contacts?: object,
+ *     objects_page?: object,
+ *     events_page?: object
+ *   },
+ *   home?: {
+ *     about?: object,
+ *     festival?: object,
+ *     objects_section?: object,
+ *     scenarios_section?: object
+ *   },
+ *   objects?: Array<object>,
+ *   scenarios?: Array<object>,
+ *   events?: Array<object>
+ * } | null>}
  */
 export const getSiteContent = async (locale) => {
   const base = getApiBaseUrl ? getApiBaseUrl() : ''

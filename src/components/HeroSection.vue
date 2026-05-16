@@ -27,7 +27,7 @@
 
     <div class="relative z-10 max-w-7xl mx-auto min-h-[92vh] md:min-h-screen flex flex-col justify-center px-4 md:px-8 py-16 md:py-24">
       <div class="max-w-4xl lg:mx-auto lg:text-center">
-        <div class="hero-panel">
+        <div class="hero-panel hero-panel--enter">
           <div class="hero-logo-wrap mb-6 lg:mx-auto">
             <img
               :src="heroLogoSrc"
@@ -317,6 +317,17 @@ onBeforeUnmount(() => {
     radial-gradient(circle at 80% 30%, rgba(27, 91, 127, 0.12), transparent 42%);
 }
 
+@keyframes hero-child-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .hero-panel {
   padding: 2rem 1.5rem;
   border-radius: 2rem;
@@ -325,6 +336,44 @@ onBeforeUnmount(() => {
     linear-gradient(180deg, rgba(10, 13, 9, 0.48), rgba(13, 17, 13, 0.62)),
     radial-gradient(circle at top, rgba(201, 169, 97, 0.12), transparent 46%);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+}
+
+.hero-panel.hero-panel--enter > * {
+  opacity: 0;
+  animation: hero-child-in 0.92s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-panel.hero-panel--enter > *:nth-child(1) {
+  animation-delay: 0.06s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(2) {
+  animation-delay: 0.14s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(3) {
+  animation-delay: 0.22s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(5) {
+  animation-delay: 0.38s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(6) {
+  animation-delay: 0.46s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(7) {
+  animation-delay: 0.54s;
+}
+.hero-panel.hero-panel--enter > *:nth-child(8) {
+  animation-delay: 0.62s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-panel.hero-panel--enter > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .hero-logo-wrap {

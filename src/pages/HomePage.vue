@@ -3,14 +3,28 @@
     <Header />
     <main>
       <HeroSection :latest-news="heroNews" />
-      <AboutSection />
-      <HomeNewsSection :actuality-news="actualityNews" :latest-feed-news="latestFeedNews" />
-      <CulturalObjectsSection />
-      <MapSection @open-modal="handleOpenModal" />
-      <FestivalSection />
-      <GallerySection />
+      <RevealOnScroll>
+        <AboutSection />
+      </RevealOnScroll>
+      <RevealOnScroll :delay-ms="70">
+        <HomeNewsSection :actuality-news="actualityNews" :latest-feed-news="latestFeedNews" />
+      </RevealOnScroll>
+      <RevealOnScroll :delay-ms="140">
+        <CulturalObjectsSection />
+      </RevealOnScroll>
+      <RevealOnScroll :delay-ms="210">
+        <MapSection @open-modal="handleOpenModal" />
+      </RevealOnScroll>
+      <RevealOnScroll :delay-ms="280">
+        <FestivalSection />
+      </RevealOnScroll>
+      <RevealOnScroll :delay-ms="350">
+        <GallerySection />
+      </RevealOnScroll>
 
-      <PageCta :cta="homeCta" />
+      <RevealOnScroll :delay-ms="420">
+        <PageCta :cta="homeCta" />
+      </RevealOnScroll>
     </main>
     <Footer />
 
@@ -36,6 +50,7 @@ import GallerySection from '../components/GallerySection.vue'
 import Footer from '../components/Footer.vue'
 import DistrictModal from '../components/DistrictModal.vue'
 import PageCta from '../components/PageCta.vue'
+import RevealOnScroll from '../components/RevealOnScroll.vue'
 import { useSeoPage } from '../composables/useSeoPage'
 import { homeSeoContent } from '../content/sitePages'
 import overview from '../assets/optimized/hero/overview.webp'

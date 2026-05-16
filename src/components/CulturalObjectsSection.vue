@@ -6,16 +6,15 @@
       <div class="text-center mb-12">
         <div class="section-badge mx-auto">
           <span class="section-dot"></span>
-          Объекты комплекса
+          {{ objectsSection.badge }}
         </div>
 
         <h2 class="section-title mt-5 mb-5">
-          Ключевые объекты «Өтүкен»
+          {{ objectsSection.title }}
         </h2>
 
         <p class="section-lead">
-          Это не один объект, а целая среда: культурные пространства, сервисы для гостей и площадки для событий.
-          Нажмите на карточку — откроется описание.
+          {{ objectsSection.lead }}
         </p>
       </div>
 
@@ -118,7 +117,8 @@
       </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL: в body, чтобы position:fixed не ломался из-за transform у предков -->
+    <Teleport to="body">
     <transition name="modal">
       <div
           v-if="isOpen"
@@ -290,6 +290,7 @@
         </div>
       </div>
     </transition>
+    </Teleport>
   </section>
 </template>
 
@@ -297,6 +298,7 @@
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
 import { lockBodyScroll, unlockBodyScroll } from '../composables/useBodyScrollLock.js'
 import { objectCatalog } from '../content/objectCatalog'
+import { objectsSection } from '../content/homeContent'
 
 const objects = objectCatalog
 

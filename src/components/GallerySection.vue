@@ -6,30 +6,32 @@
       <div class="text-center mb-10 md:mb-12">
         <div class="section-badge mx-auto">
           <span class="section-dot"></span>
-          Сценарии пространства
+          {{ scenariosSection.badge }}
         </div>
 
         <h2 class="section-title mt-5 mb-5">
-          Как раскрывается территория
+          {{ scenariosSection.title }}
         </h2>
 
         <p class="section-lead">
-          Этот блок не повторяет список объектов, а показывает, как территория ощущается для гостя:
-          от первого впечатления и прогулочного маршрута до культурного центра и мест отдыха.
+          {{ scenariosSection.lead }}
         </p>
       </div>
 
       <div class="theme-card gallery-guide mx-auto max-w-5xl p-5 md:p-6 mb-8 md:mb-10">
         <div class="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
           <div class="text-sm md:text-base text-[var(--ink-soft)] leading-7">
-            Нажмите на карточку, чтобы открыть серию ракурсов и короткое объяснение,
-            чем именно этот сценарий важен для будущего опыта посетителя.
+            {{ scenariosSection.guideText }}
           </div>
 
           <div class="flex flex-wrap gap-2 md:justify-end">
-            <span class="gallery-guide-chip">Фото и ракурсы</span>
-            <span class="gallery-guide-chip">Краткий смысл</span>
-            <span class="gallery-guide-chip">Понятный контекст</span>
+            <span
+              v-for="(chip, index) in scenariosSection.guideChips"
+              :key="`gallery-chip-${index}`"
+              class="gallery-guide-chip"
+            >
+              {{ chip }}
+            </span>
           </div>
         </div>
       </div>
@@ -37,7 +39,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 auto-rows-[260px] xl:auto-rows-[272px] gap-4">
         <button
           v-for="item in scenarios"
-          :key="item.id"
+          :key="item.slug"
           type="button"
           class="group relative overflow-hidden rounded-[1.9rem] border border-[rgba(184,138,66,0.16)] shadow-[0_20px_42px_rgba(56,42,19,0.12)] text-left focus:outline-none focus:ring-2 focus:ring-[rgba(184,138,66,0.36)]"
           :class="item.layout"
@@ -95,6 +97,7 @@
       </div>
     </div>
 
+    <Teleport to="body">
     <transition name="gallery-modal">
       <div
         v-if="isOpen && selected"
@@ -165,7 +168,7 @@
                   <div v-if="hasGalleryControls" class="hidden sm:flex items-center gap-2">
                     <button
                       v-for="(image, index) in currentGallery"
-                      :key="`${selected.id}-${index}`"
+                      :key="`${selected.slug}-${index}`"
                       type="button"
                       class="gallery-thumb"
                       :class="index === galleryIndex ? 'gallery-thumb--active' : ''"
@@ -228,7 +231,7 @@
                   <div class="flex gap-2 overflow-x-auto pb-2">
                     <button
                       v-for="(image, index) in currentGallery"
-                      :key="`${selected.id}-mobile-${index}`"
+                      :key="`${selected.slug}-mobile-${index}`"
                       type="button"
                       class="gallery-thumb"
                       :class="index === galleryIndex ? 'gallery-thumb--active' : ''"
@@ -255,160 +258,16 @@
         </div>
       </div>
     </transition>
+    </Teleport>
   </section>
 </template>
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { lockBodyScroll, unlockBodyScroll } from '../composables/useBodyScrollLock.js'
+import { scenariosList, scenariosSection } from '../content/homeContent'
 
-import overview from '../assets/optimized/hero/overview.webp'
-import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
-import hero1 from '../assets/optimized/hero/1.webp'
-import hero1Mobile from '../assets/optimized/hero/1-mobile.webp'
-import hero4 from '../assets/optimized/hero/4.webp'
-import hero4Mobile from '../assets/optimized/hero/4-mobile.webp'
-import hero5 from '../assets/optimized/hero/5.webp'
-import hero5Mobile from '../assets/optimized/hero/5-mobile.webp'
-import hero13 from '../assets/optimized/hero/13.webp'
-import hero13Mobile from '../assets/optimized/hero/13-mobile.webp'
-
-import alley1 from '../assets/optimized/objects/alley/1.webp'
-import alley1Mobile from '../assets/optimized/objects/alley/1-mobile.webp'
-import alley2 from '../assets/optimized/objects/alley/2.webp'
-import alley2Mobile from '../assets/optimized/objects/alley/2-mobile.webp'
-import alley5 from '../assets/optimized/objects/alley/5.webp'
-import alley5Mobile from '../assets/optimized/objects/alley/5-mobile.webp'
-
-import hotel1 from '../assets/optimized/objects/hotel/1.webp'
-import hotel1Mobile from '../assets/optimized/objects/hotel/1-mobile.webp'
-import hotel2 from '../assets/optimized/objects/hotel/2.webp'
-import hotel2Mobile from '../assets/optimized/objects/hotel/2-mobile.webp'
-import hotel3 from '../assets/optimized/objects/hotel/3.webp'
-import hotel3Mobile from '../assets/optimized/objects/hotel/3-mobile.webp'
-
-const scenarios = [
-  {
-    id: 'masterplan',
-    title: 'Общий образ территории',
-    eyebrow: 'Масштаб',
-    description: 'Как жилые кварталы, общественные зоны и маршруты складываются в единую среду.',
-    full:
-      'Этот сценарий помогает увидеть не отдельные здания, а целостную среду. С высоты считывается структура кварталов, общественных зон и прогулочных направлений, благодаря чему посетитель быстрее понимает масштаб и логику будущего комплекса.',
-    note: 'Лучший ракурс, чтобы сначала почувствовать общий масштаб и устройство территории.',
-    highlights: [
-      'Показывает, как жилая среда связана с общественными пространствами',
-      'Помогает быстро понять масштаб проекта без перегруза деталями',
-      'Даёт цельное первое представление о будущем ритме территории'
-    ],
-    image: overview,
-    imageMobile: overviewMobile,
-    gallery: [overview, hero1],
-    galleryMobile: [overviewMobile, hero1Mobile],
-    layout: 'lg:col-span-7 lg:row-span-2',
-    compact: false
-  },
-  {
-    id: 'cultural-axis',
-    title: 'Аллея родовых групп Тувы',
-    eyebrow: 'Культура',
-    description: 'Смысловое ядро комплекса с этнокультурной символикой и пространством для церемоний.',
-    full:
-      'Здесь территория раскрывается как культурное пространство, а не просто как застройка. Аллея родовых групп Тувы задаёт символический центр комплекса, объединяет маршруты и формирует место, где традиция становится видимой и современной.',
-    note: 'Это сердце комплекса, в котором культурный смысл ощущается сильнее всего.',
-    highlights: [
-      'Формирует главную точку идентичности всего комплекса',
-      'Создаёт пространство для церемоний, встреч и культурных событий',
-      'Помогает посетителю почувствовать связь места с традицией Тувы'
-    ],
-    image: alley1,
-    imageMobile: alley1Mobile,
-    gallery: [alley1, alley2, alley5],
-    galleryMobile: [alley1Mobile, alley2Mobile, alley5Mobile],
-    layout: 'lg:col-span-5',
-    compact: true
-  },
-  {
-    id: 'guest-contour',
-    title: 'Гостевой контур',
-    eyebrow: 'Гостеприимство',
-    description: 'Архитектура размещения для туристов и участников событийной программы.',
-    full:
-      'Этот сценарий показывает, как комплекс принимает гостей не только через события, но и через комфорт пребывания. Архитектура размещения делает территорию пригодной для более долгого визита и превращает поездку в полноценный опыт, а не в короткий приезд.',
-    note: 'Здесь видно, как территория готова принимать гостей и работать круглый год.',
-    highlights: [
-      'Создаёт комфортный сценарий размещения для туристов и участников событий',
-      'Поддерживает более длительное пребывание на территории',
-      'Добавляет комплексу ощущение продуманного гостевого сервиса'
-    ],
-    image: hotel1,
-    imageMobile: hotel1Mobile,
-    gallery: [hotel1, hotel2, hotel3],
-    galleryMobile: [hotel1Mobile, hotel2Mobile, hotel3Mobile],
-    layout: 'lg:col-span-5',
-    compact: true
-  },
-  {
-    id: 'walking-routes',
-    title: 'Пешеходная среда',
-    eyebrow: 'Маршруты',
-    description: 'Спокойные пространства для прогулок, встреч и постепенного знакомства с территорией.',
-    full:
-      'Пешеходная среда важна тем, что делает территорию не только красивой на рендере, но и удобной в живом опыте. Именно через маршруты, посадки, освещение и открытые перспективы комплекс начинает восприниматься как место, где хочется идти дальше и проводить время.',
-    note: 'Эта часть показывает, насколько территория будет удобной в обычном человеческом ритме.',
-    highlights: [
-      'Создаёт понятный и интуитивный способ знакомиться с территорией',
-      'Делает прогулку самостоятельным ценным сценарием пребывания',
-      'Поддерживает ощущение спокойствия, порядка и открытости пространства'
-    ],
-    image: hero4,
-    imageMobile: hero4Mobile,
-    gallery: [hero4, hero13],
-    galleryMobile: [hero4Mobile, hero13Mobile],
-    layout: 'lg:col-span-4',
-    compact: true
-  },
-  {
-    id: 'public-leisure',
-    title: 'Общественные зоны',
-    eyebrow: 'Отдых',
-    description: 'Открытые сценарии для семейного отдыха, спорта и спокойного пребывания гостей.',
-    full:
-      'Общественные зоны показывают, что комплекс рассчитан не только на события или проживание. Здесь появляется повседневная жизнь пространства: семейный отдых, прогулки, неформальные встречи и время, проведённое на территории без спешки.',
-    note: 'Сценарий, который делает территорию живой и комфортной для разных возрастов.',
-    highlights: [
-      'Подходит для семейного досуга и спокойного отдыха',
-      'Усиливает чувство живой среды, а не только проектного макета',
-      'Добавляет территории регулярный повседневный ритм'
-    ],
-    image: hero5,
-    imageMobile: hero5Mobile,
-    gallery: [hero5, hero1],
-    galleryMobile: [hero5Mobile, hero1Mobile],
-    layout: 'lg:col-span-4',
-    compact: true
-  },
-  {
-    id: 'first-impression',
-    title: 'Первое впечатление',
-    eyebrow: 'Входная группа',
-    description: 'Ракурс, который сразу задаёт характер пространства и ощущение организованной среды.',
-    full:
-      'Первое впечатление работает мгновенно: ещё до знакомства с деталями человек считывает аккуратность, статус и характер комплекса. Этот сценарий помогает понять, как территория встречает гостя и каким будет её общее эмоциональное звучание.',
-    note: 'Именно здесь формируется эмоциональное ожидание от всей территории.',
-    highlights: [
-      'Создаёт убедительное и запоминающееся первое впечатление',
-      'Помогает территории выглядеть цельной и продуманной с первых секунд',
-      'Поддерживает ощущение культурного, а не случайного пространства'
-    ],
-    image: hero13,
-    imageMobile: hero13Mobile,
-    gallery: [hero13, hero4],
-    galleryMobile: [hero13Mobile, hero4Mobile],
-    layout: 'lg:col-span-4',
-    compact: true
-  }
-]
+const scenarios = scenariosList
 
 const isOpen = ref(false)
 const isMobileViewport = ref(false)

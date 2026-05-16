@@ -6,11 +6,26 @@
 
         <div class="relative z-10 grid lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12">
           <div>
-            <div class="text-[var(--bg-sand)] font-extrabold tracking-[0.18em] text-3xl md:text-4xl">ӨТҮКЕН</div>
-            <p class="mt-5 max-w-xl text-white/78 leading-8 text-base md:text-lg">
-              Этнокультурный комплекс в Республике Тыва, где традиции становятся частью современной туристической,
-              событийной и общественной среды.
-            </p>
+            <div class="flex gap-4 md:gap-5 items-start">
+              <div class="footer-logo-wrap shrink-0">
+                <img
+                  :src="footerLogoSrc"
+                  alt=""
+                  width="80"
+                  height="80"
+                  class="footer-logo"
+                  decoding="async"
+                  loading="lazy"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-[var(--bg-sand)] font-extrabold tracking-[0.18em] text-3xl md:text-4xl">ӨТҮКЕН</div>
+                <p class="mt-5 max-w-xl text-white/78 leading-8 text-base md:text-lg">
+                  Этнокультурный комплекс в Республике Тыва, где традиции становятся частью современной туристической,
+                  событийной и общественной среды.
+                </p>
+              </div>
+            </div>
 
             <div class="mt-8 grid sm:grid-cols-2 gap-4">
               <div class="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
@@ -77,6 +92,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { pageNavigation, siteConfig } from '../seo/site'
+import footerLogoSrc from '../assets/brand/bayken-hero-logo.png'
 
 const currentYear = new Date().getFullYear()
 const phoneHref = siteConfig.phone.replace(/[^\d+]/g, '')
@@ -86,6 +102,27 @@ const phoneHref = siteConfig.phone.replace(/[^\d+]/g, '')
 .footer-contact-link {
   display: block;
   width: 100%;
+}
+
+.footer-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 6px 18px rgba(201, 169, 97, 0.3));
+}
+
+@media (min-width: 768px) {
+  .footer-logo {
+    width: 5rem;
+    height: 5rem;
+  }
 }
 
 .footer-mail-button {

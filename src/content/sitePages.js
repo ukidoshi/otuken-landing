@@ -3,12 +3,13 @@ import { reactive } from 'vue'
 /**
  * Тексты страниц лендинга.
  *
- * Управляется через админку **только главная страница** (`homeSeoContent`).
- * Если включён API `GET /api/v1/site-content?locale=...`, переводы для
- * `home` накладываются поверх дефолтов (см. `applySitePagesOverrides`).
+ * Эти значения служат ДЕФОЛТАМИ для всех страниц проекта. Если включён API
+ * `GET /api/v1/site-content?locale=...`, переводы накладываются поверх
+ * (см. `applySitePagesOverrides`). Если API недоступен — пользователь видит
+ * ровно эти тексты.
  *
- * Остальные страницы (`complex`, `location`, `contacts`, `objects_page`,
- * `events_page`) живут как статические константы и редактируются прямо в коде.
+ * Поддерживаемые ключи в API: `home`, `complex`, `location`, `contacts`,
+ * `objects_page`, `events_page`.
  */
 
 const DEFAULT_HOME = {
@@ -462,28 +463,35 @@ const replaceContents = (target, defaults) => {
   Object.assign(target, clone(defaults))
 }
 
-/** Главная страница — единственный раздел, управляемый через админку. */
 export const homeSeoContent = reactive(clone(DEFAULT_HOME))
+export const complexPageContent = reactive(clone(DEFAULT_COMPLEX))
+export const locationPageContent = reactive(clone(DEFAULT_LOCATION))
+export const contactsPageContent = reactive(clone(DEFAULT_CONTACTS))
+export const objectsPageContent = reactive(clone(DEFAULT_OBJECTS_PAGE))
+export const eventsPageContent = reactive(clone(DEFAULT_EVENTS_PAGE))
 
-/** Остальные страницы — статика, редактируется в коде. */
-export const complexPageContent = clone(DEFAULT_COMPLEX)
-export const locationPageContent = clone(DEFAULT_LOCATION)
-export const contactsPageContent = clone(DEFAULT_CONTACTS)
-export const objectsPageContent = clone(DEFAULT_OBJECTS_PAGE)
-export const eventsPageContent = clone(DEFAULT_EVENTS_PAGE)
-
-/** Сбросить тексты главной к исходным дефолтам (перед наложением новой локали). */
+/** Сбросить все страницы к исходным дефолтам (перед наложением новой локали). */
 export const resetSitePagesToDefaults = () => {
   replaceContents(homeSeoContent, DEFAULT_HOME)
+  replaceContents(complexPageContent, DEFAULT_COMPLEX)
+  replaceContents(locationPageContent, DEFAULT_LOCATION)
+  replaceContents(contactsPageContent, DEFAULT_CONTACTS)
+  replaceContents(objectsPageContent, DEFAULT_OBJECTS_PAGE)
+  replaceContents(eventsPageContent, DEFAULT_EVENTS_PAGE)
 }
 
 /**
  * Наложить данные из API (под одну выбранную локаль) поверх дефолтов.
- * Поддерживаемый ключ: `home`. Любые другие ключи (`complex`, `location`,
- * `contacts`, `objects_page`, `events_page`) игнорируются — эти страницы
- * редактируются в коде.
+ * Поддерживаемые ключи в `data`: `home`, `complex`, `location`, `contacts`,
+ * `objects_page`, `events_page`. Любой ключ опционален. Отсутствующее поле
+ * = «использовать дефолт из кода».
  */
 export const applySitePagesOverrides = (data) => {
   if (!data || typeof data !== 'object') return
   if (data.home) overlayInto(homeSeoContent, data.home)
+  if (data.complex) overlayInto(complexPageContent, data.complex)
+  if (data.location) overlayInto(locationPageContent, data.location)
+  if (data.contacts) overlayInto(contactsPageContent, data.contacts)
+  if (data.objects_page) overlayInto(objectsPageContent, data.objects_page)
+  if (data.events_page) overlayInto(eventsPageContent, data.events_page)
 }
