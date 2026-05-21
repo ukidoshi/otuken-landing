@@ -40,18 +40,23 @@
             />
           </div>
 
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/30 bg-black/36 text-xs md:text-sm mb-6 lg:mx-auto">
+          <div
+            v-if="heroSection.badge"
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9A961]/30 bg-black/36 text-xs md:text-sm mb-6 lg:mx-auto"
+          >
             <span class="w-2 h-2 rounded-full bg-[#C9A961]"></span>
-            Республика Тыва • проект в стадии строительства
+            {{ heroSection.badge }}
           </div>
 
           <h1 class="hero-title display-font text-5xl md:text-7xl lg:text-[5.8rem] leading-[0.92] mb-6">
-            Этнокультурный комплекс <span class="text-[#C9A961]">«Өтүкен»</span>
+            {{ heroSection.title }}
           </h1>
 
-          <p class="hero-copy text-base md:text-xl text-white/92 leading-relaxed mb-9 max-w-3xl lg:mx-auto">
-            Пространство культуры, туризма и событий в Республике Тыва.
-            «Өтүкен» объединяет этнокультурную среду, инфраструктуру для отдыха и площадки для крупных мероприятий.
+          <p
+            v-if="heroSection.lead"
+            class="hero-copy text-base md:text-xl text-white/92 leading-relaxed mb-9 max-w-3xl lg:mx-auto"
+          >
+            {{ heroSection.lead }}
           </p>
 
           <div
@@ -136,7 +141,8 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { heroSection } from '../content/homeContent'
 import { eventCatalog } from '../content/events'
 import overview from '../assets/optimized/hero/overview.webp'
 import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
@@ -149,7 +155,7 @@ defineProps({
   }
 })
 
-const featuredEvent = eventCatalog[0] ?? null
+const featuredEvent = computed(() => eventCatalog[0] ?? null)
 
 const slides = ref([
   {

@@ -15,7 +15,9 @@ import {
 } from '../content/events'
 import {
   applyAboutSectionOverrides,
+  applyCtaOverrides,
   applyFestivalSectionOverrides,
+  applyHeroOverrides,
   applyObjectsSectionOverrides,
   applyScenariosOverrides,
   applyScenariosSectionOverrides,
@@ -37,11 +39,13 @@ const applyAll = (payload) => {
 
   // Тексты + фотографии секций главной страницы.
   if (payload.home) {
-    const { about, festival, scenarios_section, objects_section } = payload.home
+    const { hero, about, festival, scenarios_section, objects_section, cta } = payload.home
+    if (hero) applyHeroOverrides(hero)
     if (about) applyAboutSectionOverrides(about)
     if (festival) applyFestivalSectionOverrides(festival)
     if (scenarios_section) applyScenariosSectionOverrides(scenarios_section)
     if (objects_section) applyObjectsSectionOverrides(objects_section)
+    if (cta) applyCtaOverrides(cta)
   }
 
   // Карточки объектов комплекса + детальная страница /obekty/:slug.

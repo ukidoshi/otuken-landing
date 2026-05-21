@@ -15,7 +15,7 @@
       <RevealOnScroll :delay-ms="210">
         <MapSection @open-modal="handleOpenModal" />
       </RevealOnScroll>
-      <RevealOnScroll :delay-ms="280">
+      <RevealOnScroll v-if="showFestival" :delay-ms="280">
         <FestivalSection />
       </RevealOnScroll>
       <RevealOnScroll :delay-ms="350">
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import Header from '../components/Header.vue'
 import HeroSection from '../components/HeroSection.vue'
 import AboutSection from '../components/AboutSection.vue'
@@ -52,6 +52,7 @@ import DistrictModal from '../components/DistrictModal.vue'
 import PageCta from '../components/PageCta.vue'
 import RevealOnScroll from '../components/RevealOnScroll.vue'
 import { useSeoPage } from '../composables/useSeoPage'
+import { ctaSection, festivalSection } from '../content/homeContent'
 import { homeSeoContent } from '../content/sitePages'
 import overview from '../assets/optimized/hero/overview.webp'
 import { makeFaqSchema, makePlaceSchema } from '../seo/schema'
@@ -98,12 +99,8 @@ const loadLatestNews = async () => {
 const isModalOpen = ref(false)
 const selectedDistrictId = ref(null)
 
-const homeCta = {
-  title: 'Обсудить проект и дальнейшие шаги',
-  text:
-    'Если хотите обсудить проект, сотрудничество или будущие шаги, команда проекта на связи.',
-  primary: { label: 'Связаться с нами', to: { path: '/', hash: '#contact' } }
-}
+const homeCta = ctaSection
+const showFestival = computed(() => festivalSection.visible !== false)
 
 const handleOpenModal = (districtId) => {
   selectedDistrictId.value = districtId

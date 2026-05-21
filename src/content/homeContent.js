@@ -383,6 +383,22 @@ const DEFAULT_OBJECTS_SECTION = {
     'Это не один объект, а целая среда: культурные пространства, сервисы для гостей и площадки для событий. Нажмите на карточку — откроется описание.'
 }
 
+const DEFAULT_HERO = {
+  badge: 'Республика Тыва • проект в стадии строительства',
+  title: 'Этнокультурный комплекс «Өтүкен»',
+  lead:
+    'Пространство культуры, туризма и событий в Республике Тыва. «Өтүкен» объединяет этнокультурную среду, инфраструктуру для отдыха и площадки для крупных мероприятий.'
+}
+
+const DEFAULT_CTA = {
+  title: 'Обсудить проект и дальнейшие шаги',
+  text:
+    'Если хотите обсудить проект, сотрудничество или будущие шаги, команда проекта на связи.',
+  primary: { label: 'Связаться с нами', to: { path: '/', hash: '#contact' } }
+}
+
+export const heroSection = reactive(clone(DEFAULT_HERO))
+export const ctaSection = reactive(clone(DEFAULT_CTA))
 export const aboutSection = reactive(clone(DEFAULT_ABOUT))
 export const festivalSection = reactive(clone(DEFAULT_FESTIVAL))
 export const scenariosList = reactive(clone(DEFAULT_SCENARIOS))
@@ -390,11 +406,23 @@ export const scenariosSection = reactive(clone(DEFAULT_SCENARIOS_SECTION))
 export const objectsSection = reactive(clone(DEFAULT_OBJECTS_SECTION))
 
 export const resetHomeContentToDefaults = () => {
+  replaceContents(heroSection, DEFAULT_HERO)
+  replaceContents(ctaSection, DEFAULT_CTA)
   replaceContents(aboutSection, DEFAULT_ABOUT)
   replaceContents(festivalSection, DEFAULT_FESTIVAL)
   replaceContents(scenariosSection, DEFAULT_SCENARIOS_SECTION)
   replaceContents(objectsSection, DEFAULT_OBJECTS_SECTION)
   scenariosList.splice(0, scenariosList.length, ...clone(DEFAULT_SCENARIOS))
+}
+
+export const applyHeroOverrides = (data) => {
+  if (!data || typeof data !== 'object') return
+  overlayInto(heroSection, data)
+}
+
+export const applyCtaOverrides = (data) => {
+  if (!data || typeof data !== 'object') return
+  overlayInto(ctaSection, data)
 }
 
 export const applyScenariosSectionOverrides = (data) => {
