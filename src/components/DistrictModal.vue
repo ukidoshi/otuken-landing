@@ -155,6 +155,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { districts } from '../composables/useDistricts.js'
 import { lockBodyScroll, unlockBodyScroll } from '../composables/useBodyScrollLock.js'
+import { getApiBaseUrl } from '../services/newsApi'
 
 const props = defineProps({
   isOpen: {
@@ -169,8 +170,10 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
-const districtInterestEndpoint =
-  import.meta.env.VITE_DISTRICT_INTEREST_ENDPOINT || '/api/leads/district-interest'
+const districtInterestEndpoint = computed(() => {
+  const path = import.meta.env.VITE_DISTRICT_INTEREST_ENDPOINT || '/api/leads/district-interest'
+  return `${getApiBaseUrl()}${path}`
+})
 
 const currentDistrict = computed(() => {
   return props.districtId ? districts[props.districtId] : null
@@ -273,7 +276,7 @@ const submitLead = async () => {
   submitMessage.value = ''
 
   try {
-    const response = await fetch(districtInterestEndpoint, {
+    const response = await fetch(districtInterestEndpoint.value, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
