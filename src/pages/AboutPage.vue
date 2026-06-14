@@ -14,6 +14,8 @@
         image-alt="Вид на территорию этнокультурного комплекса Өтүкен"
       />
 
+      <AboutOriginSection :origin="aboutPageContent.origin" :fallback-photos="originFallbackPhotos" />
+
       <section class="py-8 md:py-10 px-4 md:px-8">
         <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.02fr_0.98fr] gap-6">
           <article class="theme-card p-7 md:p-9">
@@ -112,6 +114,7 @@
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import PageHero from '../components/PageHero.vue'
+import AboutOriginSection from '../components/AboutOriginSection.vue'
 import ContentSections from '../components/ContentSections.vue'
 import FaqSection from '../components/FaqSection.vue'
 import PageCta from '../components/PageCta.vue'
@@ -120,25 +123,94 @@ import { aboutPageContent } from '../content/sitePages'
 import overview from '../assets/optimized/hero/overview.webp'
 import overviewMobile from '../assets/optimized/hero/overview-mobile.webp'
 import { makeBreadcrumbSchema, makeFaqSchema } from '../seo/schema'
+import { getAbsoluteImageUrl, getAbsoluteUrl, siteConfig } from '../seo/site'
+
+import origin1 from '../assets/optimized/about-origin/1.webp'
+import origin1Mobile from '../assets/optimized/about-origin/1-mobile.webp'
+import origin2 from '../assets/optimized/about-origin/2.webp'
+import origin2Mobile from '../assets/optimized/about-origin/2-mobile.webp'
+import origin3 from '../assets/optimized/about-origin/3.webp'
+import origin3Mobile from '../assets/optimized/about-origin/3-mobile.webp'
+import origin4 from '../assets/optimized/about-origin/4.webp'
+import origin4Mobile from '../assets/optimized/about-origin/4-mobile.webp'
+import origin5 from '../assets/optimized/about-origin/5.webp'
+import origin5Mobile from '../assets/optimized/about-origin/5-mobile.webp'
+import origin6 from '../assets/optimized/about-origin/6.webp'
+import origin6Mobile from '../assets/optimized/about-origin/6-mobile.webp'
+import origin7 from '../assets/optimized/about-origin/7.webp'
+import origin7Mobile from '../assets/optimized/about-origin/7-mobile.webp'
+import origin8 from '../assets/optimized/about-origin/8.webp'
+import origin8Mobile from '../assets/optimized/about-origin/8-mobile.webp'
+import origin9 from '../assets/optimized/about-origin/9.webp'
+import origin9Mobile from '../assets/optimized/about-origin/9-mobile.webp'
 
 const heroImage = overview
 const heroImageMobile = overviewMobile
+
+const originFallbackPhotos = [
+  { src: origin1, mobile: origin1Mobile },
+  { src: origin2, mobile: origin2Mobile },
+  { src: origin3, mobile: origin3Mobile },
+  { src: origin4, mobile: origin4Mobile },
+  { src: origin5, mobile: origin5Mobile },
+  { src: origin6, mobile: origin6Mobile },
+  { src: origin7, mobile: origin7Mobile },
+  { src: origin8, mobile: origin8Mobile },
+  { src: origin9, mobile: origin9Mobile }
+]
 
 const breadcrumbs = [
   { label: 'Главная', to: '/' },
   { label: 'О нас' }
 ]
 
+/**
+ * Schema.org AboutPage с разделом-историей: помогает поисковым системам и
+ * ИИ-агентам понять происхождение проекта (землячество «Алантос», Казань → Тува).
+ */
+const buildAboutSchema = () => {
+  const origin = aboutPageContent.origin || {}
+  const articleBody = [origin.lead, ...(origin.paragraphs || []), origin.quote]
+    .filter(Boolean)
+    .join('\n\n')
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: aboutPageContent.title,
+    description: aboutPageContent.description,
+    url: getAbsoluteUrl('/o-nas'),
+    inLanguage: 'ru',
+    isPartOf: { '@id': `${siteConfig.siteUrl}#website` },
+    about: { '@id': `${siteConfig.siteUrl}#organization` },
+    primaryImageOfPage: getAbsoluteImageUrl(heroImage),
+    mainEntity: {
+      '@type': 'Article',
+      headline: origin.title,
+      description: origin.lead,
+      articleBody,
+      inLanguage: 'ru',
+      about: ['этнокультурный комплекс «Өтүкен»', 'землячество «Алантос»', 'культура Тувы'],
+      author: { '@id': `${siteConfig.siteUrl}#organization` },
+      publisher: { '@id': `${siteConfig.siteUrl}#organization` },
+      image: (origin.captions || [])
+        .map((_, index) => getAbsoluteImageUrl(originFallbackPhotos[index]?.src))
+        .filter(Boolean)
+    }
+  }
+}
+
 useSeoPage(
-  {
+  () => ({
     title: aboutPageContent.title,
     description: aboutPageContent.description,
     path: '/o-nas',
     image: heroImage
-  },
-  [
+  }),
+  () => [
     makeBreadcrumbSchema(breadcrumbs),
-    makeFaqSchema(aboutPageContent.faq)
+    makeFaqSchema(aboutPageContent.faq),
+    buildAboutSchema()
   ]
 )
 </script>
