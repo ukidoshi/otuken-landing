@@ -13,7 +13,7 @@ export const districts = {
     labelAngle: -12,
 
     type: 'Спортивный',
-    status: 'sold',
+    status: 'active',
     color: '#2563eb',
     polygon: '324 285,359 138,503 122,514 155,664 157,664 176,576 176, 577 185',
     description:
@@ -61,7 +61,7 @@ export const districts = {
     labelAngle: 0,
 
     type: 'Конный спорт',
-    status: 'building',
+    status: 'active',
     color: '#8B4513',
     polygon: '1 586, 91 632, 89 675, 1 662',
     description:
